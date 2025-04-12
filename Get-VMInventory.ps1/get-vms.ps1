@@ -3,7 +3,7 @@ $vms = Get-SCVirtualMachine -VMMServer "qvmmcit" -All
 $vm = $vms | select * -First 1
 $vm | clip
 #>
-
+$start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{
   "CIT"  = "phvmmcit"
@@ -169,9 +169,10 @@ foreach ($env in $envMap.Keys) {
 $csvPath = Join-Path $csvFolder "vm_snapshot_$fileTimestamp.csv"
 $allFlattenedVMs | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8
 
+$end = Get-Date
+$timespan = New-TimeSpan -Start $start -End $end
+Write-Host "Script completed in $($timespan.Hours) hours, $($timespan.Minutes) minutes, and $($timespan.Seconds) seconds."
 Write-Host "Export complete. File saved to: $csvPath"
-
-
 
 
 

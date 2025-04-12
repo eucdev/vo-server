@@ -1,8 +1,3 @@
-<#
-$vms = Get-SCVirtualMachine -VMMServer "qvmmcit" -All
-$vm = $vms | select * -First 1
-$vm | clip
-#>
 $start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{

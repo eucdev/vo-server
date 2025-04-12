@@ -81,8 +81,8 @@ foreach ($env in $envMap.Keys) {
       HeartbeatEnabled                    = $vm.HeartbeatEnabled
       BackupEnabled                       = $vm.BackupEnabled
       GuestServiceInterfaceEnabled        = $vm.GuestServiceInterfaceEnabled
-      ClusterNonPossibleOwner             = @('', ($vm.ClusterPreferredOwner.Name -join ','))[$vm.ClusterPreferredOwner]
-      ClusterPreferredOwner               = @('', ($vm.ClusterNonPossibleOwner.Name -join ','))[$vm.ClusterNonPossibleOwner]
+      ClusterNonPossibleOwner             = if ($vm.ClusterNonPossibleOwner) { ($vm.ClusterNonPossibleOwner.Name -join ',') } else { '' }
+      ClusterPreferredOwner               = if ($vm.ClusterPreferredOwner) { ($vm.ClusterPreferredOwner.Name -join ',') } else { '' }
       AvailabilitySetNames                = ($vm.AvailabilitySetNames -join ',')
       LiveCloningEnabled                  = $vm.LiveCloningEnabled
       MostRecentTaskID                    = $vm.MostRecentTaskID

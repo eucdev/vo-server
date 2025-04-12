@@ -44,7 +44,7 @@ foreach ($env in $envMap.Keys) {
       VMConfigResourceStatus              = $vm.VMConfigResourceStatus
       VMResource                          = $vm.VMResource
       VMResourceStatus                    = $vm.VMResourceStatus
-      DiskResources                       = ($vm.DiskResources | ForEach-Object { $_.ToString() }) -join ','
+      DiskResources                       = ($vm.DiskResources | % { $_.Name }) -join ','
       UnsupportedReason                   = $vm.UnsupportedReason
       VirtualMachineState                 = $vm.VirtualMachineState
       Version                             = $vm.Version
@@ -81,9 +81,9 @@ foreach ($env in $envMap.Keys) {
       HeartbeatEnabled                    = $vm.HeartbeatEnabled
       BackupEnabled                       = $vm.BackupEnabled
       GuestServiceInterfaceEnabled        = $vm.GuestServiceInterfaceEnabled
-      ClusterNonPossibleOwner             = $vm.ClusterNonPossibleOwner
-      ClusterPreferredOwner               = $vm.ClusterPreferredOwner
-      AvailabilitySetNames                = $vm.AvailabilitySetNames
+      ClusterNonPossibleOwner             = @('', ($vm.ClusterPreferredOwner.Name -join ','))[$vm.ClusterPreferredOwner]
+      ClusterPreferredOwner               = @('', ($vm.ClusterNonPossibleOwner.Name -join ','))[$vm.ClusterNonPossibleOwner]
+      AvailabilitySetNames                = ($vm.AvailabilitySetNames -join ',')
       LiveCloningEnabled                  = $vm.LiveCloningEnabled
       MostRecentTaskID                    = $vm.MostRecentTaskID
       MostRecentTaskUIState               = $vm.MostRecentTaskUIState
@@ -104,7 +104,7 @@ foreach ($env in $envMap.Keys) {
       DynamicMemoryMaximumMB              = $vm.DynamicMemoryMaximumMB
       DynamicMemoryBufferPercentage       = $vm.DynamicMemoryBufferPercentage
       MemoryWeight                        = $vm.MemoryWeight
-      BootOrder                           = $vm.BootOrder
+      BootOrder                           = ($vm.BootOrder -join ',')
       FirstBootDevice                     = $vm.FirstBootDevice
       SecureBootEnabled                   = $vm.SecureBootEnabled
       SecureBootTemplate                  = $vm.SecureBootTemplate
@@ -113,8 +113,7 @@ foreach ($env in $envMap.Keys) {
       EnabledNestedVirtualization         = $vm.EnabledNestedVirtualization
       IsTagEmpty                          = $vm.IsTagEmpty
       Tag                                 = $vm.Tag
-      CustomProperties                    = ($vm.CustomProperties | ForEach-Object { $_ }) -join ','
-      CustomProperty                      = ($vm.CustomProperty | ForEach-Object { $_ }) -join ','
+      CustomProperty                      = ($vm.CustomProperty.Keys | sort | % { "$_=$($vm.CustomProperty[$_])" }) -join '|'
       CPUType                             = $vm.CPUType
       ExpectedCPUUtilization              = $vm.ExpectedCPUUtilization
       DiskIO                              = $vm.DiskIO
@@ -131,13 +130,13 @@ foreach ($env in $envMap.Keys) {
       AutomaticCriticalErrorAction        = $vm.AutomaticCriticalErrorAction
       AutomaticCriticalErrorActionTimeout = $vm.AutomaticCriticalErrorActionTimeout
       CheckpointType                      = $vm.CheckpointType
-      VirtualDVDDrives                    = ($vm.VirtualDVDDrives | ForEach-Object { $_ }) -join ','
-      VirtualHardDisks                    = ($vm.VirtualHardDisks | ForEach-Object { $_ }) -join ','
-      VirtualDiskDrives                   = ($vm.VirtualDiskDrives | ForEach-Object { $_ }) -join ','
+      VirtualDVDDrives                    = ($vm.VirtualDVDDrives | % { $_ }) -join ','
+      VirtualHardDisks                    = ($vm.VirtualHardDisks | % { $_ }) -join ','
+      VirtualDiskDrives                   = ($vm.VirtualDiskDrives | % { $_ }) -join ','
       ShareSCSIBus                        = $vm.ShareSCSIBus
-      VirtualNetworkAdapters              = ($vm.VirtualNetworkAdapters | ForEach-Object { $_ }) -join ','
+      VirtualNetworkAdapters              = ($vm.VirtualNetworkAdapters | % { $_ }) -join ','
       HasVirtualFibreChannelAdapters      = $vm.HasVirtualFibreChannelAdapters
-      VirtualSCSIAdapters                 = ($vm.VirtualSCSIAdapters | ForEach-Object { $_ }) -join ','
+      VirtualSCSIAdapters                 = ($vm.VirtualSCSIAdapters | % { $_ }) -join ','
       CapabilityProfile                   = $vm.CapabilityProfile
       CapabilityProfileCompatibilityState = $vm.CapabilityProfileCompatibilityState
       OSDiskID                            = $vm.OSDiskID

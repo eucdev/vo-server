@@ -1,7 +1,8 @@
+<#
 $vms = Get-SCVirtualMachine -VMMServer "qvmmcit" -All
 $vm = $vms | select * -First 1
 $vm | clip
-
+#>
 
 # Define your environments and associated VMM servers
 $envMap = @{
@@ -11,7 +12,7 @@ $envMap = @{
 }
 
 # Create a folder to store the CSVs
-$csvFolder = "C:\vm-data"
+$csvFolder = "C:\temp\vm-data"
 if (-not (Test-Path $csvFolder)) {
   New-Item -ItemType Directory -Path $csvFolder | Out-Null
 }
@@ -158,6 +159,8 @@ foreach ($env in $envMap.Keys) {
       MarkedForDeletion                   = $vm.MarkedForDeletion
       IsFullyCached                       = $vm.IsFullyCached
       MostRecentTaskIfLocal               = $vm.MostRecentTaskIfLocal
+      ClusterName                         = ($vm.VMHost.HostCluster.Name -split '\.')[0]
+      Environment                         = $env
       Timestamp                           = $timestamp
     }
   }

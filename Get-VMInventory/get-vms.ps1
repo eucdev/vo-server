@@ -149,7 +149,6 @@ foreach ($env in $envMap.Keys) {
       AddedTime                           = $vm.AddedTime
       ModifiedTime                        = $vm.ModifiedTime
       Enabled                             = $vm.Enabled
-      ID                                  = $vm.ID
       MarkedForDeletion                   = $vm.MarkedForDeletion
       IsFullyCached                       = $vm.IsFullyCached
       MostRecentTaskIfLocal               = $vm.MostRecentTaskIfLocal

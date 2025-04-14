@@ -2,10 +2,11 @@ Set-Location "C:\Code\vo-server\Get-VMInventory"
 $start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{
-  "CIT"  = "phvmmcit"
-  "ANMA" = "pvmmanma"
-  "QA"   = "qvmmcit"
+  # "CIT"  = "phvmmcit"
+  # "ANMA" = "pvmmanma"
+  "QA" = "qvmmcit"
 }
+
 
 # Create a folder to store the CSVs
 $csvFolder = "C:\Code\vo-server\Get-VMInventory\data"
@@ -85,7 +86,7 @@ foreach ($env in $envMap.Keys) {
       MostRecentTaskUIState               = $vm.MostRecentTaskUIState
       MostRecentTask                      = $vm.MostRecentTask
       Location                            = $vm.Location
-      CreationTime                        = $vm.CreationTime
+      CreationTime                        = $vm.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
       OperatingSystem                     = $vm.OperatingSystem
       HasVMAdditions                      = $vm.HasVMAdditions
       VMAddition                          = $vm.VMAddition
@@ -147,8 +148,8 @@ foreach ($env in $envMap.Keys) {
       Accessibility                       = $vm.Accessibility
       Name                                = $vm.Name
       IsViewOnly                          = $vm.IsViewOnly
-      AddedTime                           = $vm.AddedTime
-      ModifiedTime                        = $vm.ModifiedTime
+      AddedTime                           = $vm.AddedTime.ToString("yyyy-MM-dd HH:mm:ss")
+      ModifiedTime                        = $vm.ModifiedTime.ToString("yyyy-MM-dd HH:mm:ss")
       Enabled                             = $vm.Enabled
       MarkedForDeletion                   = $vm.MarkedForDeletion
       IsFullyCached                       = $vm.IsFullyCached
@@ -162,12 +163,9 @@ foreach ($env in $envMap.Keys) {
 
 # Export to CSV
 $csvPath = Join-Path $csvFolder "vm_snapshot_$fileTimestamp.csv"
-$allFlattenedVMs | Export-Csv -Path $csvPath -NoTypeInformation -Encoding UTF8
+$allFlattenedVMs | ConvertTo-Csv -NoTypeInformation | Out-File -FilePath $csvPath -Encoding utf8
 
 $end = Get-Date
 $timespan = New-TimeSpan -Start $start -End $end
 Write-Host "Script completed in $($timespan.Hours) hours, $($timespan.Minutes) minutes, and $($timespan.Seconds) seconds."
 Write-Host "Export complete. File saved to: $csvPath"
-
-
-

@@ -2,7 +2,7 @@ Set-Location "C:\Code\vo-server\Get-VMInventory"
 $start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{
-  # "CIT"  = "phvmmcit"
+  "CIT"  = "phvmmcit"
   "ANMA" = "pvmmanma"
   "QA"   = "qvmmcit"
 }

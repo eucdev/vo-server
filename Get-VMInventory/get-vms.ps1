@@ -1,3 +1,4 @@
+Set-Location "C:\Code\vo-server\Get-VMInventory"
 $start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{
@@ -7,7 +8,7 @@ $envMap = @{
 }
 
 # Create a folder to store the CSVs
-$csvFolder = "C:\temp\vm-data"
+$csvFolder = "C:\Code\vo-server\Get-VMInventory\data"
 if (-not (Test-Path $csvFolder)) {
   New-Item -ItemType Directory -Path $csvFolder | Out-Null
 }

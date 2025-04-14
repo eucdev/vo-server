@@ -15,18 +15,29 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func getPasswordFromCredManager(target string) (string, error) {
-	psCmd := fmt.Sprintf(`(Get-StoredCredential -Target "%s").Password`, target)
-	out, err := exec.Command("powershell", "-Command", psCmd).Output()
+// Securely fetch username and password from Windows Credential Manager
+func getCredsFromCredManager(target string) (string, string, error) {
+	// Get username
+	userCmd := fmt.Sprintf(`(Get-StoredCredential -Target "%s").UserName`, target)
+	userOut, err := exec.Command("powershell", "-Command", userCmd).Output()
 	if err != nil {
-		return "", fmt.Errorf("PowerShell error: %w", err)
+		return "", "", fmt.Errorf("PowerShell error getting username: %w", err)
 	}
-	return strings.TrimSpace(string(out)), nil
+	username := strings.TrimSpace(string(userOut))
+
+	// Get plaintext password from SecureString
+	passCmd := fmt.Sprintf(`$cred = Get-StoredCredential -Target "%s"; [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($cred.Password))`, target)
+	passOut, err := exec.Command("powershell", "-Command", passCmd).Output()
+	if err != nil {
+		return "", "", fmt.Errorf("PowerShell error getting password: %w", err)
+	}
+	password := strings.TrimSpace(string(passOut))
+
+	return username, password, nil
 }
 
 func main() {
-	username := "root"
-	password, err := getPasswordFromCredManager("BrownCloudSQL")
+	username, password, err := getCredsFromCredManager("BrownCloudSQL")
 	if err != nil {
 		log.Fatalf("❌ Failed to get stored credential: %v", err)
 	}
@@ -86,15 +97,36 @@ func processCSV(csvFile string, db *sql.DB) {
 	defer file.Close()
 
 	reader := csv.NewReader(bufio.NewReader(file))
+	reader.LazyQuotes = true
 	records, err := reader.ReadAll()
 	if err != nil || len(records) < 2 {
 		log.Printf("❌ Invalid or empty CSV: %v", err)
 		return
 	}
 
-	headers := records[0]
+	headersRaw := records[0]
+	headers := make([]string, len(headersRaw))
+	columns := make([]string, len(headersRaw))
+
+	for i, h := range headersRaw {
+		cleaned := strings.TrimSpace(strings.Trim(h, `"`)) // removes surrounding quotes
+		headers[i] = cleaned
+		columns[i] = fmt.Sprintf("`%s`", cleaned) // backtick-quote MySQL-safe column names
+	}
+
+
 	placeholders := "(" + strings.TrimRight(strings.Repeat("?,", len(headers)), ",") + ")"
-	insertQuery := fmt.Sprintf("INSERT INTO vm_inventory (%s) VALUES %s", strings.Join(headers, ", "), placeholders)
+	insertQuery := fmt.Sprintf("INSERT INTO vm_inventory (%s) VALUES %s", strings.Join(columns, ", "), placeholders)
+
+
+	fmt.Println("Insert Query Preview:")
+	fmt.Println(insertQuery)
+
+	fmt.Println("🔍 Cleaned Headers Preview:")
+	for _, h := range headers {
+		fmt.Println(h)
+	}
+
 
 	tx, err := db.Begin()
 	if err != nil {

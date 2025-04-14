@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -50,14 +51,10 @@ func main() {
 	}
 	fmt.Println("Connected to MySQL!")
 
-	var dbName string
-	if err := db.QueryRow("SELECT DATABASE()").Scan(&dbName); err != nil {
-		log.Fatalf("Failed to query current database: %v", err)
-	}
-	fmt.Printf("🔍 Connected to database: %s\n", dbName)
-
 	baseDir, _ := os.Getwd()
 	dataDir := filepath.Join(baseDir, "data")
+	archiveDir := filepath.Join(baseDir, "archive")
+	os.MkdirAll(archiveDir, os.ModePerm)
 
 	files, err := os.ReadDir(dataDir)
 	if err != nil {
@@ -69,15 +66,21 @@ func main() {
 			continue
 		}
 		filePath := filepath.Join(dataDir, f.Name())
-		printFirstInsertQuery(filePath, db)
-		break
+		success := insertCSV(filePath, db)
+		if success {
+			archivePath := filepath.Join(archiveDir, time.Now().Format("2006-01-02_15-04-05")+"_"+f.Name())
+			if err := os.Rename(filePath, archivePath); err == nil {
+				fmt.Printf("📦 Moved to archive: %s\n", archivePath)
+			}
+		}
 	}
 }
 
-func printFirstInsertQuery(csvFile string, db *sql.DB) {
+func insertCSV(csvFile string, db *sql.DB) bool {
 	file, err := os.Open(csvFile)
 	if err != nil {
-		log.Fatalf("Failed to open CSV: %v", err)
+		log.Printf("Failed to open CSV: %v", err)
+		return false
 	}
 	defer file.Close()
 
@@ -85,19 +88,13 @@ func printFirstInsertQuery(csvFile string, db *sql.DB) {
 	reader.LazyQuotes = true
 	records, err := reader.ReadAll()
 	if err != nil || len(records) < 2 {
-		log.Fatalf("Invalid or empty CSV: %v", err)
+		log.Printf("Invalid or empty CSV: %v", err)
+		return false
 	}
 
 	headersRaw := records[0]
-	row := records[1]
-
-	if len(headersRaw) != len(row) {
-		log.Fatalf("Header count (%d) does not match value count (%d)", len(headersRaw), len(row))
-	}
-
 	headers := make([]string, len(headersRaw))
 	columns := make([]string, len(headersRaw))
-	values := make([]string, len(row))
 	columnTypes := make(map[string]string)
 
 	for i, h := range headersRaw {
@@ -115,50 +112,71 @@ func printFirstInsertQuery(csvFile string, db *sql.DB) {
 			log.Fatalf("Failed getting type for column '%s': %v", cleaned, err)
 		}
 		columnTypes[cleaned] = dataType
+	}
 
-		val := strings.Trim(row[i], `"`)
-		switch strings.ToLower(dataType) {
-		case "tinyint":
-			if strings.EqualFold(val, "true") {
-				values[i] = "1"
-			} else if strings.EqualFold(val, "false") {
-				values[i] = "0"
-			} else if val == "" {
-				values[i] = "NULL"
-			} else {
-				values[i] = val
-			}
-		case "int", "bigint", "decimal", "float", "double":
-			if val == "" {
-				values[i] = "NULL"
-			} else {
-				values[i] = val
-			}
-		default:
-			if val == "" {
-				values[i] = "NULL"
-			} else {
-				// escaped := strings.ReplaceAll(val, "'", `\\'`)
-				escaped := strings.ReplaceAll(val, "\\", "\\\\")         // escape backslashes
-				escaped = strings.ReplaceAll(escaped, "'", "\\'")        // escape single quotes
-				
-				values[i] = fmt.Sprintf("'%s'", escaped)
+	tx, err := db.Begin()
+	if err != nil {
+		log.Printf("Transaction error: %v", err)
+		return false
+	}
+
+	success := 0
+	for _, row := range records[1:] {
+		values := make([]string, len(row))
+		for i, val := range row {
+			val = strings.Trim(val, `"`)
+			switch strings.ToLower(columnTypes[headers[i]]) {
+			case "tinyint":
+				if strings.EqualFold(val, "true") {
+					values[i] = "1"
+				} else if strings.EqualFold(val, "false") || val == "" {
+					values[i] = "0"
+				} else {
+					values[i] = val
+				}
+			case "int", "bigint", "decimal", "float", "double":
+				if val == "" {
+					values[i] = "NULL"
+				} else {
+					values[i] = val
+				}
+			case "datetime", "timestamp":
+				if val == "" {
+					values[i] = "NULL"
+				} else {
+					values[i] = fmt.Sprintf("'%s'", val)
+				}
+			default:
+				if val == "" {
+					values[i] = "NULL"
+				} else {
+					// escaped := strings.ReplaceAll(val, "'", `\\'`)
+					escaped := strings.ReplaceAll(val, "\\", "\\\\")
+					escaped = strings.ReplaceAll(escaped, "'", "\\'")
+					values[i] = fmt.Sprintf("'%s'", escaped)
+				}
 			}
 		}
+
+		query := fmt.Sprintf(
+			"INSERT INTO `OIT-VO`.`vm_inventory` (%s) VALUES (%s);",
+			strings.Join(columns, ", "),
+			strings.Join(values, ", "),
+		)
+
+		if _, err := tx.Exec(query); err != nil {
+			log.Printf("Insert failed: %v\nQuery: %s\n", err, query)
+			tx.Rollback()
+			return false
+		}
+		success++
 	}
 
-	insertQuery := fmt.Sprintf(
-		"INSERT INTO `OIT-VO`.`vm_inventory` (%s) VALUES (%s);",
-		strings.Join(columns, ", "),
-		strings.Join(values, ", "),
-	)
-	fmt.Println("\n Final INSERT Statement:")
-	fmt.Println(insertQuery)
-
-	if _, err := db.Exec(insertQuery); err != nil {
-		log.Fatalf("Failed to execute insert: %v", err)
-	} else {
-		fmt.Println("Insert executed successfully!")
+	if err := tx.Commit(); err != nil {
+		log.Printf("Commit error: %v", err)
+		return false
 	}
+
+	fmt.Printf("Inserted %d rows from %s\n", success, filepath.Base(csvFile))
+	return true
 }
-

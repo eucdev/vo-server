@@ -3,8 +3,8 @@ $start = Get-Date
 # Define your environments and associated VMM servers
 $envMap = @{
   # "CIT"  = "phvmmcit"
-  # "ANMA" = "pvmmanma"
-  "QA" = "qvmmcit"
+  "ANMA" = "pvmmanma"
+  "QA"   = "qvmmcit"
 }
 
 

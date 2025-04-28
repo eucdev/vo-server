@@ -16,7 +16,7 @@ if (-not (Test-Path $csvFolder)) {
 
 # Current timestamp for filenames and inserts
 $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-$fileTimestamp = Get-Date -Format "yyyyMMdd_HHmm"
+$fileTimestamp = Get-Date -Format "yyyy-MM-dd HH-mm-ss"
 
 # Master array to hold all flattened VM data
 $allFlattenedVMs = @()
@@ -162,7 +162,7 @@ foreach ($env in $envMap.Keys) {
 }
 
 # Export to CSV
-$csvPath = Join-Path $csvFolder "vm_snapshot_$fileTimestamp.csv"
+$csvPath = Join-Path $csvFolder "$fileTimestamp - HyperV VMs.csv"
 $allFlattenedVMs | ConvertTo-Csv -NoTypeInformation | Out-File -FilePath $csvPath -Encoding utf8
 
 $end = Get-Date

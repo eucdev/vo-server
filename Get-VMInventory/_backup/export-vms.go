@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"context"
 	"database/sql"
 	"encoding/csv"
 	"fmt"
@@ -12,10 +11,6 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
-
-	"google.golang.org/api/drive/v3"
-	"google.golang.org/api/googleapi"
-	"google.golang.org/api/option"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -39,23 +34,9 @@ func getCredsFromCredManager(target string) (string, string, error) {
 }
 
 func main() {
-	// SQL Credentials
 	username, password, err := getCredsFromCredManager("BrownCloudSQL")
 	if err != nil {
 		log.Fatalf("Failed to get stored credential: %v", err)
-	}
-
-	// Google Drive Credentials
-	serviceAccountUser, parentFolderID, err := getCredsFromCredManager("ReportsVMInventory")
-	if err != nil {
-		log.Fatalf("Failed to get Google Drive credential: %v", err)
-	}
-	secretFolder := "S:\\vo-server\\secure"
-	serviceAccountKeyFile := filepath.Join(secretFolder, serviceAccountUser+".json")
-
-	_, archiveFolderID, err := getCredsFromCredManager("ReportsVMInventoryArchive")
-	if err != nil {
-		log.Fatalf("Failed to get Archive Folder credential: %v", err)
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/OIT-VO?parseTime=true", username, password)
@@ -70,20 +51,10 @@ func main() {
 	}
 	fmt.Println("Connected to MySQL!")
 
-	ctx := context.Background()
-	driveService, err := drive.NewService(ctx, option.WithCredentialsFile(serviceAccountKeyFile))
-	if err != nil {
-		log.Fatalf("Unable to create Drive service: %v", err)
-	}
-
-	moveOldFiles(driveService, parentFolderID, archiveFolderID)
-
 	baseDir, _ := os.Getwd()
 	dataDir := filepath.Join(baseDir, "data")
 	archiveDir := filepath.Join(baseDir, "archive")
 	os.MkdirAll(archiveDir, os.ModePerm)
-
-	uploadArchivedFiles(archiveDir, driveService, parentFolderID)
 
 	files, err := os.ReadDir(dataDir)
 	if err != nil {
@@ -94,29 +65,12 @@ func main() {
 		if f.IsDir() || !strings.HasSuffix(f.Name(), ".csv") {
 			continue
 		}
-
 		filePath := filepath.Join(dataDir, f.Name())
-		successDB := insertCSV(filePath, db)
-		successDrive := false
-
-		if successDB {
-			successDrive = uploadToDrive(filePath, driveService, parentFolderID)
-		}
-
-		if successDB && successDrive {
-			// Both succeeded, delete file
-			if err := os.Remove(filePath); err == nil {
-				fmt.Printf("Deleted file after success: %s\n", filePath)
-			} else {
-				fmt.Printf("Could not delete file: %s\n", err)
-			}
-		} else {
-			// If either failed, archive it
-			archivePath := filepath.Join(archiveDir, filepath.Base(filePath))
+		success := insertCSV(filePath, db)
+		if success {
+			archivePath := filepath.Join(archiveDir, time.Now().Format("2006-01-02_15-04-05")+"_"+f.Name())
 			if err := os.Rename(filePath, archivePath); err == nil {
-				fmt.Printf("Moved to archive: %s\n", archivePath)
-			} else {
-				fmt.Printf("Could not move to archive: %s\n", err)
+				fmt.Printf("📦 Moved to archive: %s\n", archivePath)
 			}
 		}
 	}
@@ -196,6 +150,7 @@ func insertCSV(csvFile string, db *sql.DB) bool {
 				if val == "" {
 					values[i] = "NULL"
 				} else {
+					// escaped := strings.ReplaceAll(val, "'", `\\'`)
 					escaped := strings.ReplaceAll(val, "\\", "\\\\")
 					escaped = strings.ReplaceAll(escaped, "'", "\\'")
 					values[i] = fmt.Sprintf("'%s'", escaped)
@@ -224,101 +179,4 @@ func insertCSV(csvFile string, db *sql.DB) bool {
 
 	fmt.Printf("Inserted %d rows from %s\n", success, filepath.Base(csvFile))
 	return true
-}
-
-func uploadToDrive(localCSVPath string, driveService *drive.Service, parentFolderID string) bool {
-	file, err := os.Open(localCSVPath)
-	if err != nil {
-		log.Printf("Failed to open CSV for Drive upload: %v", err)
-		return false
-	}
-	defer file.Close()
-
-	originalFileName := strings.TrimSuffix(filepath.Base(localCSVPath), filepath.Ext(localCSVPath))
-
-	fileMetadata := &drive.File{
-		Name:     originalFileName,
-		Parents:  []string{parentFolderID},
-		MimeType: "application/vnd.google-apps.spreadsheet",
-	}
-
-	_, err = driveService.Files.Create(fileMetadata).
-		Media(file, googleapi.ContentType("text/csv")).
-		Fields("id", "name").
-		Do()
-
-	if err != nil {
-		log.Printf("Failed uploading to Drive: %v", err)
-		return false
-	}
-
-	fmt.Printf("Uploaded %s to Google Drive\n", filepath.Base(localCSVPath))
-	return true
-}
-
-func uploadArchivedFiles(archiveDir string, driveService *drive.Service, parentFolderID string) {
-	files, err := os.ReadDir(archiveDir)
-	if err != nil {
-		log.Printf("Failed to read archive directory: %v", err)
-		return
-	}
-
-	for _, f := range files {
-		if f.IsDir() || !strings.HasSuffix(f.Name(), ".csv") {
-			continue
-		}
-
-		filePath := filepath.Join(archiveDir, f.Name())
-		success := uploadToDrive(filePath, driveService, parentFolderID)
-
-		if success {
-			if err := os.Remove(filePath); err == nil {
-				fmt.Printf("Deleted archived file after successful upload: %s\n", filePath)
-			} else {
-				fmt.Printf("Could not delete archived file: %s\n", err)
-			}
-		} else {
-			fmt.Printf("Upload failed, keeping archived file for next round: %s\n", filePath)
-		}
-	}
-}
-
-
-func moveOldFiles(driveService *drive.Service, parentFolderID, archiveFolderID string) {
-	fmt.Println("Checking and moving old files to archive...")
-
-	yesterday := time.Now().Add(-24 * time.Hour).Format(time.RFC3339)
-
-	// 5 mins to check the lgic
-	// yesterday := time.Now().Add(-5 * time.Minute).Format(time.RFC3339)
-
-	query := fmt.Sprintf("('%s' in parents) and (mimeType != 'application/vnd.google-apps.folder') and createdTime < '%s' and trashed = false", parentFolderID, yesterday)
-
-	files, err := driveService.Files.List().
-			Q(query).
-			Fields("files(id, name, parents)").
-			PageSize(1000).
-			Do()
-	if err != nil {
-			log.Printf("Failed to list files for moving: %v", err)
-			return
-	}
-
-	if len(files.Files) == 0 {
-			fmt.Println("No old files found to move.")
-			return
-	}
-
-	for _, file := range files.Files {
-			_, err := driveService.Files.Update(file.Id, nil).
-					AddParents(archiveFolderID).
-					RemoveParents(parentFolderID).
-					Fields("id, parents").
-					Do()
-			if err != nil {
-					log.Printf("Failed to move file %s: %v", file.Name, err)
-			} else {
-					fmt.Printf("Moved old file: %s to archive\n", file.Name)
-			}
-	}
 }

@@ -1,5 +1,10 @@
 # Prerequisites
 *.d
+*.json
+
+# Ignore Go build cache and vendor
+/vendor/
+*.test
 
 # Compiled Object files
 *.slo
@@ -30,8 +35,18 @@
 *.exe
 *.out
 *.app
+*.csv
 
 # Logs
 [Ll]ogs/
 [Dd]ata
 [Aa]rchive
+[Vv]endor
+
+
+# Ignore your local archive folders
+/archive/
+/archive_original/
+/_backup/
+/_upload/
+/data/

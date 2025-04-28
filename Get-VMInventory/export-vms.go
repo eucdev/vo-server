@@ -1,3 +1,13 @@
+/*
+Export VMs to MySQL and Google Drive
+Author: Sohaib Khan (sohaib_khan@brown.edu)
+Created: April 27, 2025
+Description:
+  - Inserts VM CSVs into MySQL
+  - Uploads CSVs as Google Sheets
+  - Moves files older than 1 day to archive
+  - Deletes archive files older than 30 days
+*/
 package main
 
 import (
@@ -77,6 +87,7 @@ func main() {
 	}
 
 	moveOldFiles(driveService, parentFolderID, archiveFolderID)
+	deleteOldFilesFromArchive(driveService, archiveFolderID)
 
 	baseDir, _ := os.Getwd()
 	dataDir := filepath.Join(baseDir, "data")
@@ -289,7 +300,6 @@ func moveOldFiles(driveService *drive.Service, parentFolderID, archiveFolderID s
 
 	yesterday := time.Now().Add(-24 * time.Hour).Format(time.RFC3339)
 
-	// 5 mins to check the lgic
 	// yesterday := time.Now().Add(-5 * time.Minute).Format(time.RFC3339)
 
 	query := fmt.Sprintf("('%s' in parents) and (mimeType != 'application/vnd.google-apps.folder') and createdTime < '%s' and trashed = false", parentFolderID, yesterday)
@@ -319,6 +329,39 @@ func moveOldFiles(driveService *drive.Service, parentFolderID, archiveFolderID s
 					log.Printf("Failed to move file %s: %v", file.Name, err)
 			} else {
 					fmt.Printf("Moved old file: %s to archive\n", file.Name)
+			}
+	}
+}
+
+
+func deleteOldFilesFromArchive(driveService *drive.Service, archiveFolderID string) {
+	fmt.Println("Checking and deleting old files from _archive...")
+
+	thirtyDaysAgo := time.Now().Add(-30 * 24 * time.Hour).Format(time.RFC3339)
+
+	query := fmt.Sprintf("('%s' in parents) and (mimeType != 'application/vnd.google-apps.folder') and (createdTime < '%s') and (trashed = false)", archiveFolderID, thirtyDaysAgo)
+
+	files, err := driveService.Files.List().
+			Q(query).
+			Fields("files(id, name)").
+			PageSize(1000).
+			Do()
+	if err != nil {
+			log.Printf("Failed to list files for deletion: %v", err)
+			return
+	}
+
+	if len(files.Files) == 0 {
+			fmt.Println("No old files found to delete.")
+			return
+	}
+
+	for _, file := range files.Files {
+			err := driveService.Files.Delete(file.Id).Do()
+			if err != nil {
+					log.Printf("Failed to delete file %s: %v", file.Name, err)
+			} else {
+					fmt.Printf("Deleted old archived file: %s\n", file.Name)
 			}
 	}
 }

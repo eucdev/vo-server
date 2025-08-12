@@ -1,0 +1,18 @@
+scvmmprovider:
+  appliancevm:
+    cloudid: ''
+    highlyavailable: false
+    hostgroupid: 01d77ac0-fe6d-4390-9798-ff9c0411e08c
+    memorymib: 16384
+    network:
+      dnsservers:
+      - 10.1.1.10
+      gateway: 10.4.38.1
+      ipaddressprefix: 10.4.38.0/24
+      ippoolid: a3ed5a71-eef6-4e54-ab0e-b976cb4c3350
+      k8snodeippoolend: 10.4.38.220
+      k8snodeippoolstart: 10.4.38.105
+      vmnetworkid: 967be774-5fae-4f0a-8fb6-09c51896f8fb
+    numcpus: 4
+  contentlibrary:
+    librarysharepath: \\plib-04.hvi.brown.edu\Library

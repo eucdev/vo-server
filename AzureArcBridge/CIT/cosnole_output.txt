@@ -1,0 +1,1394 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+|     0ms|  1|C:\Brown|# .\resource-bridge-onboarding-script.ps1
+.\resource-bridge-onboarding-script.ps1 : The term '.\resource-bridge-onboarding-script.ps1' is not recognized as the
+name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was
+included, verify that the path is correct and try again.
+At line:1 char:1
++ .\resource-bridge-onboarding-script.ps1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (.\resource-bridge-onboarding-script.ps1:String) [], CommandNotFoundExce
+   ption
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+|   125ms|  2|C:\Brown|# cd C:\temp\
+| 15.62ms|  3|C:\temp|# ls
+
+
+    Directory: C:\temp
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         3/13/2025  12:30 PM                Get-VMStartAction
+d-----         2/11/2024  12:01 PM                Posh-SSH
+d-----         2/24/2025   1:59 PM                Stop-DevQaVMs
+d-----          9/4/2024   8:34 AM                System Center Virtual Machine Manager
+d-----          3/9/2025   4:15 PM                time
+d-----         4/12/2025   2:22 PM                vm-data
+d-----         8/18/2024   4:16 PM                VMware-VMRC-12.0.5-22744838
+-a----          3/9/2025   3:59 PM        4445731 all_vmstets.csv
+-a----          6/1/2024  11:55 AM             20 computer.ps1
+-a----         2/12/2024   3:36 PM           4424 Create-BrownVM (QA).xml
+-a----        11/19/2024   4:04 PM           1192 Create-DCPODNetwork.tmp.txt
+-a----        11/19/2024   4:03 PM           3165 Create-InternalNetwork.tmp.txt
+-a----          5/8/2024   8:31 PM      233420440 dotnet-sdk-8.0.204-win-x64.exe
+-a----         3/14/2025   2:00 PM           8325 falconstatus.csv
+-a----        12/12/2024   9:11 PM         166252 gpreport.html
+-a----        12/12/2024   9:17 PM         166252 gpreport1.html
+-a----         3/17/2025   9:51 PM            200 Install-Crowdstrike.ps1
+-a----          3/9/2025   4:00 PM        5081632 output3.csv
+-a----          5/8/2024  10:03 PM       26712328 python-3.12.3-amd64.exe
+-a----          6/1/2024  12:14 PM           1134 query.ps1
+-a----          6/1/2024  12:19 PM           1008 script.ps1
+-a----         2/10/2024   4:47 PM          50098 Sohaib.code-profile
+-a----          6/1/2024  12:14 PM              0 tempError.txt
+-a----          6/1/2024  12:15 PM            563 tempOutput.txt
+-a----          4/8/2025   2:37 PM        5196080 vmms_cit.csv
+------         8/18/2024   4:06 PM       70741889 VMware-VMRC-12.0.5-22744838.zip
+
+
+|156.32ms|  4|C:\temp|# cd C:\Code\vo-server\AzureArcBridge\CIT
+| 31.42ms|  5|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+An error occurred. Pip failed with status code 3221225477. Use --debug for more information.
+An error occurred. Pip failed with status code 3221225477. Use --debug for more information.
+Terminate batch job (Y/N)? Y
+|  56.84s|  6|C:\..\CIT|# $env:PYTHONPATH
+| 46.88ms|  7|C:\..\CIT|# $env:PYTHONPATH = "C:\Program Files\Microsoft SDKs\Azure\CLI2"
+| 28.85ms|  8|C:\..\CIT|# $env:PYTHONPATH
+C:\Program Files\Microsoft SDKs\Azure\CLI2
+|     0ms|  9|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+==> az --version
+azure-cli                         2.76.0
+
+core                              2.76.0
+telemetry                          1.1.0
+
+Extensions:
+arcappliance                       1.5.0
+customlocation                     0.1.4
+k8s-extension                      1.6.7
+scvmm                              1.2.0
+
+Dependencies:
+msal                            1.33.0b1
+azure-mgmt-resource               23.3.0
+
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Config directory 'C:\Users\s_skhan\.azure'
+Extensions directory 'C:\Users\s_skhan\.azure\cliextensions'
+
+Python (Windows) 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+
+Legal docs and information: aka.ms/AzureCliLegal
+
+
+Your CLI is up-to-date.
+==> Logging into azure
+Please login to Azure CLI.
+        * If you're running the script for the first time, select yes.
+        * If you've recently logged in to az while running the script, you can select no.
+Confirm login to azure cli?
+Yes(y)/No(n)?: y
+To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code BWYPK7J8E to authenticate.
+
+Retrieving tenants and subscriptions for the selection...
+
+[Tenant and subscription selection]
+
+No     Subscription name    Subscription ID                       Tenant
+-----  -------------------  ------------------------------------  ----------------
+[1]    ASHCI                fb224eff-6168-4d5a-b2c8-412588ac6dc5  Brown University
+[2]    Core                 09eac076-3691-49c8-9b9d-bd6104a5e5b0  Brown University
+[3] *  VO                   1d811949-f211-41d3-9a5d-df01d8c44397  Brown University
+
+The default is marked with an *; the default tenant is 'Brown University' and subscription is 'VO' (1d811949-f211-41d3-9a5d-df01d8c44397).
+
+Select a subscription and tenant (Type a number or Enter for no changes):
+
+Tenant: Brown University
+Subscription: VO (1d811949-f211-41d3-9a5d-df01d8c44397)
+
+[Announcements]
+With the new Azure CLI login experience, you can select the subscription you want to use more easily. Learn more about it and its configuration at https://go.microsoft.com/fwlink/?linkid=2271236
+
+If you encounter any problem, please open an issue at https://aka.ms/azclibug
+
+[Warning] The login output has been updated. Please be aware that it no longer displays the full list of available subscriptions by default.
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Workstation was set up successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                     Step 2/5: Creating the Arc resource bridge
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+==> Provide the details of the VMM Server on which the Azure Arc resource bridge VM will be deployed. These credentials will be used by the Azure Arc resource bridge to update and scale itself.
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username in the format domain\username where 'domain' should be the NetBIOS name of the domain (e.g. contoso\administrator): hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+
+Create Config
+Starting createconfig
+Initializing chart values for provider: scvmm 2025-08-12T11:43:44-04:00 INFO    Inside SCVMM createClient
+{"file":"C:/__w/1/s/pkg/appliance/client.go:82","func":"GetProviderConfigValues","level":"error","msg":"Error details, Provider: scvmm, Command: CreateConfig, Msg: Error while creating config via kva, ErrorCode: CreateConfigKvaCustomerError, Error: failed to get new provider: \nSCVMM PSSession creation failed. Please check if the specfied username and password are correct. Ensure VMM Server is running and reachable from the machine where the script is executed. Kindly check if the user is an Administrator on VMM Server Machine and is part of Administrator user role in the VMM Server User Role profile. \nPlease refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \n\n: New-PSSession : [phvmmcit.hvi.brown.edu] Connecting to remote server phvmmcit.hvi.brown.edu failed with the following error message : Access is denied. For more information, see the \r\nabout_Remote_Troubleshooting Help topic.\r\nAt line:1 char:27\r\n+ ... 091974391 = New-PSSession -ComputerName 'phvmmcit.hvi.brown.edu' -Aut ...\r\n+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OpenError: (System.Manageme....RemoteRunspace:RemoteRunspace) [New-PSSession], PSRemotingTransportException\r\n    + FullyQualifiedErrorId : AccessDenied,PSSessionOpenFailed\r\n","time":"2025-08-12T11:44:46-04:00"}
+Arc Appliance run command failed during Appliance deployment with an error, please run the command again with --force to cleanup environment.
+{
+"errorCode": "CreateConfigKvaCustomerError",
+"errorResponse": "failed to get new provider: \nSCVMM PSSession creation failed. Please check if the specfied username and password are correct. Ensure VMM Server is running and reachable from the machine where the script is executed. Kindly check if the user is an Administrator on VMM Server Machine and is part of Administrator user role in the VMM Server User Role profile. \nPlease refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \n\n: New-PSSession : [phvmmcit.hvi.brown.edu] Connecting to remote server phvmmcit.hvi.brown.edu failed with the following error message : Access is denied. For more information, see the \r\nabout_Remote_Troubleshooting Help topic.\r\nAt line:1 char:27\r\n+ ... 091974391 = New-PSSession -ComputerName 'phvmmcit.hvi.brown.edu' -Aut ...\r\n+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OpenError: (System.Manageme....RemoteRunspace:RemoteRunspace) [New-PSSession], PSRemotingTransportException\r\n    + FullyQualifiedErrorId : AccessDenied,PSSessionOpenFailed\r\n",
+"errorMetadata": {
+"errorCategory": "",
+"errorAdditionalInfos": null
+}
+}
+Script execution failed with error: Appliance creation has failed.
+Please refer to the Troubleshooting guide https://aka.ms/arcscvmmtsg for self-debugging. If the issue persists, kindly create a support ticket for Azure Arc enabled SCVMM from Azure portal for further
+assistance.
+
+The script will terminate shortly
+|    6.7m| 10|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+Extension 'arcappliance' 1.5.0 is already installed.
+Latest version of 'arcappliance' is already installed.
+Extension 'k8s-extension' 1.6.7 is already installed.
+Latest version of 'k8s-extension' is already installed.
+Extension 'customlocation' 0.1.4 is already installed.
+Latest version of 'customlocation' is already installed.
+Extension 'scvmm' 1.2.0 is already installed.
+Latest version of 'scvmm' is already installed.
+==> az --version
+azure-cli                         2.76.0
+
+core                              2.76.0
+telemetry                          1.1.0
+
+Extensions:
+arcappliance                       1.5.0
+customlocation                     0.1.4
+k8s-extension                      1.6.7
+scvmm                              1.2.0
+
+Dependencies:
+msal                            1.33.0b1
+azure-mgmt-resource               23.3.0
+
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Config directory 'C:\Users\s_skhan\.azure'
+Extensions directory 'C:\Users\s_skhan\.azure\cliextensions'
+
+Python (Windows) 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+
+Legal docs and information: aka.ms/AzureCliLegal
+
+
+Your CLI is up-to-date.
+==> Logging into azure
+Please login to Azure CLI.
+        * If you're running the script for the first time, select yes.
+        * If you've recently logged in to az while running the script, you can select no.
+Confirm login to azure cli?
+Yes(y)/No(n)?: y
+To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code F272QZEHX to authenticate.
+
+Retrieving tenants and subscriptions for the selection...
+
+[Tenant and subscription selection]
+
+No     Subscription name    Subscription ID                       Tenant
+-----  -------------------  ------------------------------------  ----------------
+[1]    ASHCI                fb224eff-6168-4d5a-b2c8-412588ac6dc5  Brown University
+[2]    Core                 09eac076-3691-49c8-9b9d-bd6104a5e5b0  Brown University
+[3] *  VO                   1d811949-f211-41d3-9a5d-df01d8c44397  Brown University
+
+The default is marked with an *; the default tenant is 'Brown University' and subscription is 'VO' (1d811949-f211-41d3-9a5d-df01d8c44397).
+
+Select a subscription and tenant (Type a number or Enter for no changes):
+
+Tenant: Brown University
+Subscription: VO (1d811949-f211-41d3-9a5d-df01d8c44397)
+
+[Announcements]
+With the new Azure CLI login experience, you can select the subscription you want to use more easily. Learn more about it and its configuration at https://go.microsoft.com/fwlink/?linkid=2271236
+
+If you encounter any problem, please open an issue at https://aka.ms/azclibug
+
+[Warning] The login output has been updated. Please be aware that it no longer displays the full list of available subscriptions by default.
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Workstation was set up successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                     Step 2/5: Creating the Arc resource bridge
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+==> Provide the details of the VMM Server on which the Azure Arc resource bridge VM will be deployed. These credentials will be used by the Azure Arc resource bridge to update and scale itself.
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username in the format domain\username where 'domain' should be the NetBIOS name of the domain (e.g. contoso\administrator): hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+Files already exist and will be overwritten:
+C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Would you like to continue? (y/n): y
+
+Create Config
+Starting createconfig
+Initializing chart values for provider: scvmm 2025-08-12T11:57:58-04:00 INFO    Inside SCVMM createClient
+2025-08-12T11:58:09-04:00       INFO    scvmmProvider: CreateConfig
+
+We recommend deploying the Azure Arc resource bridge as a highly available virtual machine for a production environment. Choosing 'Y' in the next prompt will deploy the Azure Arc resource bridge in a cluster to ensure high availability while choosing 'N' will deploy it as a standalone VM.
+
+Would you like to deploy the Azure Arc resource bridge as a highly available virtual machine? (Y/N): y
+
+Please select SCVMM library share (Ensure VMM server has write access on the selected Library Share):
+1) \\plib-02.hvi.brown.edu\Library
+2) \\plib-04.hvi.brown.edu\Library
+3) \\plib-06.hvi.brown.edu\Library
+4) \\pvmmlibcit.hvi.brown.edu\VMMLibraryFiles
+Enter number: 1
+You Selected: \\plib-02.hvi.brown.edu\Library
+
+Please select SCVMM host groups (Only host groups with Network configured are displayed):
+1) All Hosts
+2) All Hosts\CIT
+3) All Hosts\CIT\DMZ
+4) All Hosts\CIT\Starfish
+5) All Hosts\CIT\SDMZ
+6) All Hosts\CIT\DCPod
+7) All Hosts\CIT\Stronghold
+8) All Hosts\CIT\Internal
+Enter number: 8
+You Selected: All Hosts\CIT\Internal
+
+Please select SCVMM VM network (Only networks with IP pools configured are displayed):
+1) 10.4.10.0 (9c24dbec-9792-4de1-93bd-5b016900503c)
+2) 10.4.12.0 (d5c801b7-75e1-4773-a308-152d98de8da4)
+3) 10.4.128.0 (ada4129f-46cc-4ec4-be53-8f4833170504)
+4) 10.4.129.0 (2efa97d0-9461-4578-8b69-95de063e0fb8)
+5) 10.4.13.0 (442b3b5d-5426-4632-bd5f-735f889d69a5)
+6) 10.4.131.0 (456a1169-ceb0-4439-ac00-531a3bf9e379)
+7) 10.4.132.0 (7cfc1b1d-2e2e-46dc-a10e-7f407c7f2e96)
+8) 10.4.14.0 (1206db61-6b13-4dc1-836e-d8d9a8a45c82)
+9) 10.4.15.0 (bb1c2fe3-154d-435c-b408-d28b3a500b9d)
+10) 10.4.16.0 (06d04511-2f22-482d-8263-40e007b32355)
+11) 10.4.17.0 (af63df25-e3b3-48a0-9ba9-b1ba02c78b00)
+12) 10.4.18.0 (e064614b-8997-44f9-822a-ce0cda08df8a)
+13) 10.4.19.0 (4076f419-8bb8-4f3a-96f7-391c0f399144)
+14) 10.4.21.0 (7bed6f02-1832-4357-8cda-ddcfbd82cb63)
+15) 10.4.22.0 (56de407a-8b09-4bde-812c-7d504bc2b84b)
+16) 10.4.23.0 (3a831cc0-1e2b-496d-b607-de1a1bd90320)
+17) 10.4.24.0 (6c5763fe-6bb2-4ea5-ab07-fa3b3a9dec89)
+18) 10.4.25.0 (74b97480-bad5-4067-8d21-5b255f783a6a)
+19) 10.4.27.0 (1d20db5c-16ca-4d4b-81d5-d3702c0ce32a)
+20) 10.4.28.0 (95c5edb8-6953-4c72-a661-314e6f9448ba)
+21) 10.4.29.0 (b5506a32-da07-4b2d-a406-9bac9ea7c150)                                                                                                                                                          22) 10.4.32.0 (c7c99359-3b14-4fdd-a7b5-b3c98a8d77b9)                                                                                                                                                          23) 10.4.34.0 (f32d1547-e2ce-4ec7-87b8-197b979d83c7)                                                                                                                                                          24) 10.4.35.0 (74d7b4f1-7a6f-4bf0-bdb9-b1ad1cc49c91)                                                                                                                                                          25) 10.4.36.0 (c0edcd9a-1aa9-42a6-9033-36a83c84aa27)                                                                                                                                                          26) 10.4.41.0 (e1813a94-305b-43a7-86b2-fe01157144d5)                                                                                                                                                          27) 10.4.42.0 (20060810-a4b6-440f-9d05-99912623d7ae)                                                                                                                                                          28) 10.4.51.0 (b91b1334-0969-4ad1-80a6-e2befaa88c75)
+29) 10.4.6.0 (c9426633-13bd-4d2a-98ae-065fc0e8db6a)
+30) 192.168.201.0 (232420e7-3c4f-492c-a536-6ab1eccfc9d7)
+31) 192.168.21.0 (074aa28b-c808-42e8-b4dd-956bb553f22f)
+32) 192.168.25.0 (38d9f8f0-bbf6-474b-9132-067a99dad222)
+33) 192.168.8.0 (66afccfa-2201-4b3e-8a50-8e525979020e)
+34) 192.168.81.0 (543158ff-cc07-4bd4-9754-f768333a15be)
+35) 223.217.1.0 (0b4196c2-82f6-486d-afd0-b5611116c19d)
+36) HVI-ClusterNetwork (5ac4a308-7f1c-41eb-bb46-c34ae8b5fe68)
+37) HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+38) HVI-LiveMigration (3052a20c-4ee1-4528-8abd-97babe32e007)
+Enter number: 37
+You Selected: HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+
+Please select SCVMM Static IP Pool:
+1) ClusterNetwork IP Address Pool (f6a97520-af99-4139-b1c2-1482a7c2046e)
+2) HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+3) LiveMigration IP Address Pool (0fbe9cde-ac34-4fae-a7cb-9e5808513d19)
+Enter number: 2
+You Selected: HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+
+Please provide Appliance cluster configuration
+
+Please enter Arc Resource Bridge VM control plane IP: 10.4.38.220
+The control plane endpoint IP '10.4.38.220' is overlapping with the provided kubernetes IP pool range ('10.4.38.105' - '10.4.38.220'), please provide an IP address outside of this range, but within the subnet '10.4.38.0/24'
+
+Please enter Arc Resource Bridge VM control plane IP: 10.4.38.20
+If your organization requires internet traffic to go through a proxy server, you need to configure the Arc resource bridge VM to use these proxy settings. Note that only a single Proxy URL can be configured for either HTTP or HTTPS proxy in Arc Resource Bridge VM. Do you want to configure the Arc resource Bridge VM proxy settings? (y/n) n
+
+All configuration files created successfully
+Appliance Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+Resource Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Infrastructure Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+
+Starting validate
+Validating the appliance configuration...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceValidate","time":"2025-08-12T12:06:27-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T12:06:27-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:06:32-04:00       INFO    Performing provider validations
+2025-08-12T12:06:32-04:00       INFO    scvmmProvider: Validate
+2025-08-12T12:08:46-04:00       INFO    Inside SCVMM createClient
+{"file":"C:/__w/1/s/pkg/appliance/client.go:170","func":"Validate","level":"error","msg":"Error details, Provider: scvmm, Command: Validate, Msg: Error while validating via kva, ErrorCode: ValidateKvaError, Error: {\n  \"code\": \"InvalidEntityError\",\n  \"message\": \"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \",\n  \"category\": \"\"\n }","time":"2025-08-12T12:08:52-04:00"}
+{
+"errorCode": "InvalidEntityError",
+"errorResponse": "{\n\"message\": \"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \"\n}",
+"errorMetadata": {
+"errorCategory": "",
+"errorAdditionalInfos": null
+}
+}
+Script execution failed with error: Appliance creation has failed.
+Please refer to the Troubleshooting guide https://aka.ms/arcscvmmtsg for self-debugging. If the issue persists, kindly create a support ticket for Azure Arc enabled SCVMM from Azure portal for further
+assistance.
+
+The script will terminate shortly
+|  13.92m| 11|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+Extension 'arcappliance' 1.5.0 is already installed.
+Latest version of 'arcappliance' is already installed.
+Extension 'k8s-extension' 1.6.7 is already installed.
+Latest version of 'k8s-extension' is already installed.
+Extension 'customlocation' 0.1.4 is already installed.
+Latest version of 'customlocation' is already installed.
+Extension 'scvmm' 1.2.0 is already installed.
+Latest version of 'scvmm' is already installed.
+==> az --version
+azure-cli                         2.76.0
+
+core                              2.76.0
+telemetry                          1.1.0
+
+Extensions:
+arcappliance                       1.5.0
+customlocation                     0.1.4
+k8s-extension                      1.6.7
+scvmm                              1.2.0
+
+Dependencies:
+msal                            1.33.0b1
+azure-mgmt-resource               23.3.0
+
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Config directory 'C:\Users\s_skhan\.azure'
+Extensions directory 'C:\Users\s_skhan\.azure\cliextensions'
+
+Python (Windows) 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+
+Legal docs and information: aka.ms/AzureCliLegal
+
+
+Your CLI is up-to-date.
+==> Logging into azure
+Please login to Azure CLI.
+        * If you're running the script for the first time, select yes.
+        * If you've recently logged in to az while running the script, you can select no.
+Confirm login to azure cli?
+Yes(y)/No(n)?: n
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Workstation was set up successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                     Step 2/5: Creating the Arc resource bridge
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Using --force flag as all the required config files are present.
+==> Provide the details of the VMM Server on which the Azure Arc resource bridge VM will be deployed. These credentials will be used by the Azure Arc resource bridge to update and scale itself.
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username in the format domain\username where 'domain' should be the NetBIOS name of the domain (e.g. contoso\administrator): hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+Appliance Run called with --force. The CLI will clean up configuration files and resources, do you wish to continue? (y/n) y
+Deleting Appliance cluster
+Deleting the appliance...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceDelete","time":"2025-08-12T12:28:56-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T12:28:56-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:29:02-04:00       INFO    scvmmProvider: DeleteAppliance
+Appliance deletion was successful
+
+Appliance cluster successfully deleted
+Deleting Appliance ARM resource
+Appliance ARM resource successfully deleted
+Deleting configuration files
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+
+Create Config
+Starting createconfig
+Initializing chart values for provider: scvmm 2025-08-12T12:29:04-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:29:13-04:00       INFO    scvmmProvider: CreateConfig
+
+We recommend deploying the Azure Arc resource bridge as a highly available virtual machine for a production environment. Choosing 'Y' in the next prompt will deploy the Azure Arc resource bridge in a cluster to ensure high availability while choosing 'N' will deploy it as a standalone VM.
+
+Would you like to deploy the Azure Arc resource bridge as a highly available virtual machine? (Y/N): y
+
+Please select SCVMM library share (Ensure VMM server has write access on the selected Library Share):
+1) \\plib-02.hvi.brown.edu\Library
+2) \\plib-04.hvi.brown.edu\Library
+3) \\plib-06.hvi.brown.edu\Library
+4) \\pvmmlibcit.hvi.brown.edu\VMMLibraryFiles
+Enter number: 1
+You Selected: \\plib-02.hvi.brown.edu\Library
+
+Please select SCVMM host groups (Only host groups with Network configured are displayed):
+1) All Hosts
+2) All Hosts\CIT
+3) All Hosts\CIT\DMZ
+4) All Hosts\CIT\Starfish
+5) All Hosts\CIT\SDMZ
+6) All Hosts\CIT\DCPod
+7) All Hosts\CIT\Stronghold
+8) All Hosts\CIT\Internal
+Enter number: 8
+You Selected: All Hosts\CIT\Internal
+
+Please select SCVMM VM network (Only networks with IP pools configured are displayed):
+1) 10.4.10.0 (9c24dbec-9792-4de1-93bd-5b016900503c)
+2) 10.4.12.0 (d5c801b7-75e1-4773-a308-152d98de8da4)
+3) 10.4.128.0 (ada4129f-46cc-4ec4-be53-8f4833170504)
+4) 10.4.129.0 (2efa97d0-9461-4578-8b69-95de063e0fb8)
+5) 10.4.13.0 (442b3b5d-5426-4632-bd5f-735f889d69a5)
+6) 10.4.131.0 (456a1169-ceb0-4439-ac00-531a3bf9e379)
+7) 10.4.132.0 (7cfc1b1d-2e2e-46dc-a10e-7f407c7f2e96)
+8) 10.4.14.0 (1206db61-6b13-4dc1-836e-d8d9a8a45c82)
+9) 10.4.15.0 (bb1c2fe3-154d-435c-b408-d28b3a500b9d)
+10) 10.4.16.0 (06d04511-2f22-482d-8263-40e007b32355)
+11) 10.4.17.0 (af63df25-e3b3-48a0-9ba9-b1ba02c78b00)
+12) 10.4.18.0 (e064614b-8997-44f9-822a-ce0cda08df8a)
+13) 10.4.19.0 (4076f419-8bb8-4f3a-96f7-391c0f399144)
+14) 10.4.21.0 (7bed6f02-1832-4357-8cda-ddcfbd82cb63)
+15) 10.4.22.0 (56de407a-8b09-4bde-812c-7d504bc2b84b)
+16) 10.4.23.0 (3a831cc0-1e2b-496d-b607-de1a1bd90320)
+17) 10.4.24.0 (6c5763fe-6bb2-4ea5-ab07-fa3b3a9dec89)                                                                                                                                                          18) 10.4.25.0 (74b97480-bad5-4067-8d21-5b255f783a6a)                                                                                                                                                          19) 10.4.27.0 (1d20db5c-16ca-4d4b-81d5-d3702c0ce32a)                                                                                                                                                          20) 10.4.28.0 (95c5edb8-6953-4c72-a661-314e6f9448ba)                                                                                                                                                          21) 10.4.29.0 (b5506a32-da07-4b2d-a406-9bac9ea7c150)                                                                                                                                                          22) 10.4.32.0 (c7c99359-3b14-4fdd-a7b5-b3c98a8d77b9)                                                                                                                                                          23) 10.4.34.0 (f32d1547-e2ce-4ec7-87b8-197b979d83c7)                                                                                                                                                          24) 10.4.35.0 (74d7b4f1-7a6f-4bf0-bdb9-b1ad1cc49c91)
+25) 10.4.36.0 (c0edcd9a-1aa9-42a6-9033-36a83c84aa27)
+26) 10.4.41.0 (e1813a94-305b-43a7-86b2-fe01157144d5)
+27) 10.4.42.0 (20060810-a4b6-440f-9d05-99912623d7ae)
+28) 10.4.51.0 (b91b1334-0969-4ad1-80a6-e2befaa88c75)
+29) 10.4.6.0 (c9426633-13bd-4d2a-98ae-065fc0e8db6a)
+30) 192.168.201.0 (232420e7-3c4f-492c-a536-6ab1eccfc9d7)
+31) 192.168.21.0 (074aa28b-c808-42e8-b4dd-956bb553f22f)
+32) 192.168.25.0 (38d9f8f0-bbf6-474b-9132-067a99dad222)
+33) 192.168.8.0 (66afccfa-2201-4b3e-8a50-8e525979020e)
+34) 192.168.81.0 (543158ff-cc07-4bd4-9754-f768333a15be)
+35) 223.217.1.0 (0b4196c2-82f6-486d-afd0-b5611116c19d)
+36) HVI-ClusterNetwork (5ac4a308-7f1c-41eb-bb46-c34ae8b5fe68)
+37) HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+38) HVI-LiveMigration (3052a20c-4ee1-4528-8abd-97babe32e007)
+Enter number: 37
+You Selected: HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+
+Please select SCVMM Static IP Pool:
+1) ClusterNetwork IP Address Pool (f6a97520-af99-4139-b1c2-1482a7c2046e)
+2) HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+3) LiveMigration IP Address Pool (0fbe9cde-ac34-4fae-a7cb-9e5808513d19)
+Enter number: 2
+You Selected: HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+
+Please provide Appliance cluster configuration
+
+Please enter Arc Resource Bridge VM control plane IP: 10.4.38.20
+If your organization requires internet traffic to go through a proxy server, you need to configure the Arc resource bridge VM to use these proxy settings. Note that only a single Proxy URL can be configured for either HTTP or HTTPS proxy in Arc Resource Bridge VM. Do you want to configure the Arc resource Bridge VM proxy settings? (y/n) n
+
+All configuration files created successfully
+Appliance Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+Resource Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Infrastructure Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+
+Starting validate
+Validating the appliance configuration...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceValidate","time":"2025-08-12T12:31:33-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T12:31:33-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:31:39-04:00       INFO    Performing provider validations
+2025-08-12T12:31:39-04:00       INFO    scvmmProvider: Validate
+2025-08-12T12:33:52-04:00       INFO    Inside SCVMM createClient
+{"file":"C:/__w/1/s/pkg/appliance/client.go:170","func":"Validate","level":"error","msg":"Error details, Provider: scvmm, Command: Validate, Msg: Error while validating via kva, ErrorCode: ValidateKvaError, Error: {\n  \"code\": \"InvalidEntityError\",\n  \"message\": \"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \",\n  \"category\": \"\"\n }","time":"2025-08-12T12:34:00-04:00"}
+{
+"errorCode": "InvalidEntityError",
+"errorResponse": "{\n\"message\": \"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \"\n}",
+"errorMetadata": {
+"errorCategory": "",
+"errorAdditionalInfos": null
+}
+}
+Script execution failed with error: Appliance creation has failed.
+Please refer to the Troubleshooting guide https://aka.ms/arcscvmmtsg for self-debugging. If the issue persists, kindly create a support ticket for Azure Arc enabled SCVMM from Azure portal for further
+assistance.
+
+The script will terminate shortly
+|   6.75m| 12|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+Extension 'arcappliance' 1.5.0 is already installed.
+Latest version of 'arcappliance' is already installed.
+Extension 'k8s-extension' 1.6.7 is already installed.
+Latest version of 'k8s-extension' is already installed.
+Extension 'customlocation' 0.1.4 is already installed.
+Latest version of 'customlocation' is already installed.
+Extension 'scvmm' 1.2.0 is already installed.
+Latest version of 'scvmm' is already installed.
+==> az --version
+azure-cli                         2.76.0
+
+core                              2.76.0
+telemetry                          1.1.0
+
+Extensions:
+arcappliance                       1.5.0
+customlocation                     0.1.4
+k8s-extension                      1.6.7
+scvmm                              1.2.0
+
+Dependencies:
+msal                            1.33.0b1
+azure-mgmt-resource               23.3.0
+
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Config directory 'C:\Users\s_skhan\.azure'
+Extensions directory 'C:\Users\s_skhan\.azure\cliextensions'
+
+Python (Windows) 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+
+Legal docs and information: aka.ms/AzureCliLegal
+
+
+Your CLI is up-to-date.
+==> Logging into azure
+Please login to Azure CLI.
+        * If you're running the script for the first time, select yes.
+        * If you've recently logged in to az while running the script, you can select no.
+Confirm login to azure cli?
+Yes(y)/No(n)?: n
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Workstation was set up successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                     Step 2/5: Creating the Arc resource bridge
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Using --force flag as all the required config files are present.
+==> Provide the details of the VMM Server on which the Azure Arc resource bridge VM will be deployed. These credentials will be used by the Azure Arc resource bridge to update and scale itself.
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username in the format domain\username where 'domain' should be the NetBIOS name of the domain (e.g. contoso\administrator): hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+Appliance Run called with --force. The CLI will clean up configuration files and resources, do you wish to continue? (y/n) y
+Deleting Appliance cluster
+Deleting the appliance...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceDelete","time":"2025-08-12T12:43:36-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T12:43:36-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:43:41-04:00       INFO    scvmmProvider: DeleteAppliance
+Appliance deletion was successful
+
+Appliance cluster successfully deleted
+Deleting Appliance ARM resource
+Appliance ARM resource successfully deleted
+Deleting configuration files
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+
+Create Config
+Starting createconfig
+Initializing chart values for provider: scvmm 2025-08-12T12:43:43-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:43:48-04:00       INFO    scvmmProvider: CreateConfig
+
+We recommend deploying the Azure Arc resource bridge as a highly available virtual machine for a production environment. Choosing 'Y' in the next prompt will deploy the Azure Arc resource bridge in a cluster to ensure high availability while choosing 'N' will deploy it as a standalone VM.
+
+Would you like to deploy the Azure Arc resource bridge as a highly available virtual machine? (Y/N): y
+
+Please select SCVMM library share (Ensure VMM server has write access on the selected Library Share):
+1) \\plib-02.hvi.brown.edu\Library
+2) \\plib-04.hvi.brown.edu\Library
+3) \\plib-06.hvi.brown.edu\Library
+4) \\pvmmlibcit.hvi.brown.edu\VMMLibraryFiles
+Enter number: 2
+You Selected: \\plib-04.hvi.brown.edu\Library
+
+Please select SCVMM host groups (Only host groups with Network configured are displayed):
+1) All Hosts
+2) All Hosts\CIT
+3) All Hosts\CIT\DMZ
+4) All Hosts\CIT\Starfish
+5) All Hosts\CIT\SDMZ
+6) All Hosts\CIT\DCPod
+7) All Hosts\CIT\Stronghold
+8) All Hosts\CIT\Internal
+Enter number: 8
+You Selected: All Hosts\CIT\Internal
+
+Please select SCVMM VM network (Only networks with IP pools configured are displayed):
+1) 10.4.10.0 (9c24dbec-9792-4de1-93bd-5b016900503c)
+2) 10.4.12.0 (d5c801b7-75e1-4773-a308-152d98de8da4)
+3) 10.4.128.0 (ada4129f-46cc-4ec4-be53-8f4833170504)
+4) 10.4.129.0 (2efa97d0-9461-4578-8b69-95de063e0fb8)
+5) 10.4.13.0 (442b3b5d-5426-4632-bd5f-735f889d69a5)
+6) 10.4.131.0 (456a1169-ceb0-4439-ac00-531a3bf9e379)
+7) 10.4.132.0 (7cfc1b1d-2e2e-46dc-a10e-7f407c7f2e96)
+8) 10.4.14.0 (1206db61-6b13-4dc1-836e-d8d9a8a45c82)
+9) 10.4.15.0 (bb1c2fe3-154d-435c-b408-d28b3a500b9d)
+10) 10.4.16.0 (06d04511-2f22-482d-8263-40e007b32355)
+11) 10.4.17.0 (af63df25-e3b3-48a0-9ba9-b1ba02c78b00)
+12) 10.4.18.0 (e064614b-8997-44f9-822a-ce0cda08df8a)
+13) 10.4.19.0 (4076f419-8bb8-4f3a-96f7-391c0f399144)
+14) 10.4.21.0 (7bed6f02-1832-4357-8cda-ddcfbd82cb63)
+15) 10.4.22.0 (56de407a-8b09-4bde-812c-7d504bc2b84b)
+16) 10.4.23.0 (3a831cc0-1e2b-496d-b607-de1a1bd90320)
+17) 10.4.24.0 (6c5763fe-6bb2-4ea5-ab07-fa3b3a9dec89)                                                                                                                                                          18) 10.4.25.0 (74b97480-bad5-4067-8d21-5b255f783a6a)                                                                                                                                                          19) 10.4.27.0 (1d20db5c-16ca-4d4b-81d5-d3702c0ce32a)                                                                                                                                                          20) 10.4.28.0 (95c5edb8-6953-4c72-a661-314e6f9448ba)                                                                                                                                                          21) 10.4.29.0 (b5506a32-da07-4b2d-a406-9bac9ea7c150)                                                                                                                                                          22) 10.4.32.0 (c7c99359-3b14-4fdd-a7b5-b3c98a8d77b9)                                                                                                                                                          23) 10.4.34.0 (f32d1547-e2ce-4ec7-87b8-197b979d83c7)                                                                                                                                                          24) 10.4.35.0 (74d7b4f1-7a6f-4bf0-bdb9-b1ad1cc49c91)                                                                                                                                                          25) 10.4.36.0 (c0edcd9a-1aa9-42a6-9033-36a83c84aa27)                                                                                                                                                          26) 10.4.41.0 (e1813a94-305b-43a7-86b2-fe01157144d5)                                                                                                                                                          27) 10.4.42.0 (20060810-a4b6-440f-9d05-99912623d7ae)                                                                                                                                                          28) 10.4.51.0 (b91b1334-0969-4ad1-80a6-e2befaa88c75)                                                                                                                                                          29) 10.4.6.0 (c9426633-13bd-4d2a-98ae-065fc0e8db6a)
+30) 192.168.201.0 (232420e7-3c4f-492c-a536-6ab1eccfc9d7)
+31) 192.168.21.0 (074aa28b-c808-42e8-b4dd-956bb553f22f)
+32) 192.168.25.0 (38d9f8f0-bbf6-474b-9132-067a99dad222)
+33) 192.168.8.0 (66afccfa-2201-4b3e-8a50-8e525979020e)
+34) 192.168.81.0 (543158ff-cc07-4bd4-9754-f768333a15be)
+35) 223.217.1.0 (0b4196c2-82f6-486d-afd0-b5611116c19d)
+36) HVI-ClusterNetwork (5ac4a308-7f1c-41eb-bb46-c34ae8b5fe68)
+37) HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+38) HVI-LiveMigration (3052a20c-4ee1-4528-8abd-97babe32e007)                                                                                                                                                  Enter number: 37                                                                                                                                                                                              You Selected: HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)                                                                                                                                                                                                                                                                                                                                                     Please select SCVMM Static IP Pool:                                                                                                                                                                           1) ClusterNetwork IP Address Pool (f6a97520-af99-4139-b1c2-1482a7c2046e)                                                                                                                                      2) HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)                                                                                                                                         3) LiveMigration IP Address Pool (0fbe9cde-ac34-4fae-a7cb-9e5808513d19)                                                                                                                                       Enter number: 2
+You Selected: HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+
+Please provide Appliance cluster configuration
+
+Please enter Arc Resource Bridge VM control plane IP: 10.4.38.20
+If your organization requires internet traffic to go through a proxy server, you need to configure the Arc resource bridge VM to use these proxy settings. Note that only a single Proxy URL can be configured for either HTTP or HTTPS proxy in Arc Resource Bridge VM. Do you want to configure the Arc resource Bridge VM proxy settings? (y/n) n
+
+All configuration files created successfully
+Appliance Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+Resource Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Infrastructure Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+
+Starting validate
+Validating the appliance configuration...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceValidate","time":"2025-08-12T12:46:04-04:00"}                          Initializing chart values for provider: scvmm 2025-08-12T12:46:04-04:00 INFO    Inside SCVMM createClient                                                                                                     2025-08-12T12:46:09-04:00       INFO    Performing provider validations                                                                                                                                       2025-08-12T12:46:09-04:00       INFO    scvmmProvider: Validate                                                                                                                                               2025-08-12T12:47:44-04:00       INFO    Testing working directory                                                                                                                                             2025-08-12T12:47:44-04:00       INFO    Testing proxy settings                                                                                                                                                2025-08-12T12:47:44-04:00       INFO    Testing content delivery network connectivity                                                                                                                         2025-08-12T12:47:45-04:00       INFO    Performing provider validations
+2025-08-12T12:47:45-04:00       INFO    scvmmProvider: Validate
+2025-08-12T12:49:21-04:00       INFO    Testing proxy settings
+2025-08-12T12:49:21-04:00       INFO    Testing content delivery network connectivity                                                                                                                         2025-08-12T12:49:22-04:00       INFO    Validation completed successfully                                                                                                                                     2025-08-12T12:49:22-04:00       INFO    Discovering kubernetes version...                                                                                                                                     2025-08-12T12:49:22-04:00       INFO    The discovered kubernetes version is v1.30.4                                                                                                                          2025-08-12T12:49:22-04:00       INFO    DownloadImage: Discovering image download information...                                                                                                              2025-08-12T12:49:23-04:00       INFO    DownloadImage: Downloading and validating image (destination dir: C:\Users\s_skhan\AppData\Local\Temp\canary-image3328964419\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42576973871)...                                                                                                                                                                       2025-08-12T12:49:29-04:00       INFO    DownloadImage: Successfully downloaded canary image, filenames : [C:\Users\s_skhan\AppData\Local\Temp\canary-image3328964419\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42576973871\mariner-canary-v82520617.vhdx.zip C:\Users\s_skhan\AppData\Local\Temp\canary-image3328964419\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42576973871\mariner-canary-v82520617.vhdx.zip-companion.rpm]
+2025-08-12T12:49:29-04:00       INFO    Successfully downloaded image C:\Users\s_skhan\AppData\Local\Temp\canary-image3328964419\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42576973871\mariner-canary-v82520617.vhdx.zip in 6.816679 seconds
+2025-08-12T12:49:29-04:00       INFO    Provisioning canary image 43fa0fa9-e81c-4a9f-a628-1b6c81608112
+2025-08-12T12:49:29-04:00       INFO    ProvisionImage: SCVMM: Starting ImageProvisioning to SCVMM Library ....
+2025-08-12T12:49:33-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx to VMM Server
+2025-08-12T12:49:38-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx from VMM Server to Library Share
+2025-08-12T12:49:56-04:00       INFO    ProvisionImage: SCVMM: Image Provision is successful
+2025-08-12T12:49:56-04:00       INFO    Successfully uploaded the canary image 43fa0fa9-e81c-4a9f-a628-1b6c81608112.vhdx to cloud fabric in 27.028932 seconds
+2025-08-12T12:49:56-04:00       INFO    Performing provider validations on canary image
+2025-08-12T12:49:56-04:00       INFO    Provider validations on canary image completed successfully
+2025-08-12T12:49:56-04:00       INFO    Deprovisioning canary image 43fa0fa9-e81c-4a9f-a628-1b6c81608112
+2025-08-12T12:49:56-04:00       INFO    Discovering kubernetes version...
+2025-08-12T12:49:56-04:00       INFO    The discovered kubernetes version is v1.30.4
+2025-08-12T12:49:56-04:00       INFO    DeprovisionImage: SCVMM: Deprovision vhdx form library share....
+2025-08-12T12:49:59-04:00       INFO    Successfully deprovisioned the canary image 43fa0fa9-e81c-4a9f-a628-1b6c81608112.vhdx to cloud fabric in 2.904968 seconds
+2025-08-12T12:49:59-04:00       INFO    Validation completed successfully
+Appliance configuration validation was successful
+
+
+Starting prepare                                                                                                                                                                                                                                                                                                                                                                                                            Downloading the Azure Arc resource bridge image and uploading it to the local image gallery.                                                                                                                  This is a long running process that is dependent on network speed. Please let the process run to completion.                                                                                                                                                                                                                                                                                                                Preparing the appliance configuration...                                                                                                                                                                                                                                                                                                                                                                                    {"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcAppliancePrepare","time":"2025-08-12T12:49:59-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T12:49:59-04:00 INFO    Inside SCVMM createClient
+2025-08-12T12:50:04-04:00       INFO    Performing provider validations
+2025-08-12T12:50:04-04:00       INFO    scvmmProvider: Validate
+2025-08-12T12:51:40-04:00       INFO    Testing proxy settings
+2025-08-12T12:51:40-04:00       INFO    Testing content delivery network connectivity
+2025-08-12T12:51:40-04:00       INFO    Validation completed successfully
+2025-08-12T12:51:40-04:00       INFO    Discovering kubernetes version...
+2025-08-12T12:51:41-04:00       INFO    The discovered kubernetes version is v1.30.4                                                                                                                          2025-08-12T12:51:41-04:00       INFO    ProvisionImage: Discovering image download information...                                                                                                             2025-08-12T12:51:41-04:00       INFO    ProvisionImage: Downloading and validating image...                                                                                                                   2025-08-12T12:52:30-04:00       INFO    ProvisionRawFiles: SCVMM: Validating raw downloaded files....                                                                                                         2025-08-12T12:52:30-04:00       INFO    ProvisionImage: SCVMM: Starting ImageProvisioning to SCVMM Library ....                                                                                               2025-08-12T12:52:34-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx to VMM Server                                                                                                             2025-08-12T12:53:39-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx from VMM Server to Library Share                                                                                          2025-08-12T12:54:16-04:00       INFO    ProvisionImage: SCVMM: Image Provision is successful
+Appliance configuration was prepared successfully
+
+
+Starting to create ARM resource of Arc Resource Bridge in Azure.
+Completed creation of ARM resource.
+C:\ProgramData\kva\.ssh not found, creating C:\ProgramData\kva\.ssh as part of non-interactive flow...
+
+Starting deployment of Arc Resource Bridge on-prem cluster.
+
+*****************************************************************************************************************************************
+LEGAL NOTICE
+Azure Arc Resource Bridge is licensed to you as part of your Azure subscription and subject to the "Use of Software with the
+Online Service" section of the Microsoft Product Terms. Your Azure subscription will be billed for fees and applicable taxes
+associated with use of Azure resources and services deployed and/or utilized by the Azure Arc Appliance until your use
+is discontinued.
+*****************************************************************************************************************************************
+
+Creating the appliance...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceDeploy","time":"2025-08-12T12:54:50-04:00"}
+Initializing chart values for provider: scvmm {"file":"C:/__w/1/s/pkg/appliance/util.go:98","func":"addAzureData","level":"info","msg":"Adding azure data for ArcApplianceDeploy","time":"2025-08-12T12:54:50-04:00"}
+{"file":"C:/__w/1/s/pkg/appliance/util.go:113","func":"addAzureData","level":"info","msg":"Adding agent version mcr.microsoft.com/azurearck8s/batch1/stable/appliance/v2/azure-arc-k8sagents:0.36.1-appliance","time":"2025-08-12T12:54:50-04:00"}
+2025-08-12T12:54:50-04:00       INFO    Inside SCVMM createClient
+2025-08-12T12:55:00-04:00       INFO    scvmmProvider: CloudInit
+2025-08-12T12:55:00-04:00       INFO    scvmmProvider: DeployAppliance
+2025-08-12T12:57:14-04:00       INFO    scvmmProvider: Waiting for Appliance VM IP is
+2025-08-12T12:57:25-04:00       INFO    scvmmProvider: Management IP is '10.4.38.169'
+2025-08-12T12:57:25-04:00       INFO    Connecting to remote host IP 10.4.38.169
+2025-08-12T12:57:26-04:00       INFO    Connection established to remote host IP 10.4.38.169
+2025-08-12T12:57:26-04:00       INFO    Copying files from remote host IP : 10.4.38.169
+2025-08-12T12:58:42-04:00       INFO    Diagnostics checker Output :    {"Result : ": "diagnostics succeeded without any error"}
+2025-08-12T12:58:42-04:00       INFO    provider: Validating VIP 10.4.38.20:22 connectivity from host
+2025-08-12T12:59:42-04:00       INFO    core: Waiting for API server
+2025-08-12T12:59:42-04:00       INFO    core: Waiting for pod 'Cloud Operator' to be ready
+2025-08-12T13:01:28-04:00       INFO    core: Waiting for pod 'Cluster API core' to be ready
+2025-08-12T13:01:50-04:00       INFO    core: Waiting for pod 'Bootstrap kubeadm' to be ready
+2025-08-12T13:01:53-04:00       INFO    core: Waiting for pod 'Control Plane kubeadm' to be ready
+2025-08-12T13:01:54-04:00       INFO    Installing KVA Image Operator on the appliance
+2025-08-12T13:01:54-04:00       INFO    Performing provider validations
+2025-08-12T13:01:54-04:00       INFO    scvmmProvider: Validate
+2025-08-12T13:04:09-04:00       INFO    Inside SCVMM createClient
+{"file":"C:/__w/1/s/pkg/appliance/client.go:117","func":"Deploy","level":"error","msg":"Error details, Provider: scvmm, Command: Deploy, Msg: Error while deploying appliance via kva, ErrorCode: DeployKvaError, Error: {\n  \"code\": \"PostOperationsError\",\n  \"message\": \"{\\n  \\\"code\\\": \\\"InvalidEntityError\\\",\\n  \\\"message\\\": \\\"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \\\",\\n  \\\"category\\\": \\\"\\\"\\n }\",\n  \"category\": \"\"\n }","time":"2025-08-12T13:04:30-04:00"}
+Successfully saved kubeconfig to: kubeconfig
+Deployment failed. Attempting to collect logs...
+Cloud logs credentials fetched successfully.
+C:\Code\vo-server\AzureArcBridge\CIT\appliance-logs-08-12-2025-13-04-30 not found, creating C:\Code\vo-server\AzureArcBridge\CIT\appliance-logs-08-12-2025-13-04-30 as part of non-interactive flow...
+Collecting logs from the appliance...
+
+2025-08-12T13:04:30-04:00       INFO    Inside SCVMM createClient
+2025-08-12T13:04:37-04:00       INFO    Running log collection script on 10.4.38.20
+2025-08-12T13:05:02-04:00       INFO    Copying files from remote host 10.4.38.20
+2025-08-12T13:05:02-04:00       INFO    Moving debug log kva.log to zip folder
+2025-08-12T13:05:02-04:00       INFO    Writing to zipFile C:\Code\vo-server\AzureArcBridge\CIT\appliance-logs-08-12-2025-13-04-30\appliance-logs-cli-20250812T170430Z.zip
+2025-08-12T13:05:02-04:00       INFO    Finished writing C:\Code\vo-server\AzureArcBridge\CIT\appliance-logs-08-12-2025-13-04-30\appliance-logs-cli-20250812T170430Z.zip
+2025-08-12T13:05:03-04:00       INFO    Finished uploading logs to Azure Blob Storage
+Appliance log collection was successful
+
+{
+"errorCode": "PostOperationsError",
+"errorResponse": "{\n\"message\": \"{\\n  \\\"code\\\": \\\"InvalidEntityError\\\",\\n  \\\"message\\\": \\\"Failed to get placement rating from SCVMM Server Please refer to the troubleshooting guide for more details - https://aka.ms/arcscvmmtsg \\\",\\n  \\\"category\\\": \\\"\\\"\\n }\"\n}",
+"errorMetadata": {
+"errorCategory": "",
+"errorAdditionalInfos": null
+}
+}
+Script execution failed with error: Appliance VM creation failed.
+Please refer to the Troubleshooting guide https://aka.ms/arcscvmmtsg for self-debugging. If the issue persists, kindly create a support ticket for Azure Arc enabled SCVMM from Azure portal for further
+assistance.
+
+The script will terminate shortly
+|     23m| 13|C:\..\CIT|#
+|     23m| 13|C:\..\CIT|# .\resource-bridge-onboarding-script.ps1
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Setting up the current workstation
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Resource bridge deployment is currently not supported over a private network by using Azure private link.
+Press Enter to confirm that the resource bridge deployment is not attempted over an Azure private link and proceed:
+
+Is the current workstation behind a proxy?
+Yes(y)/No(n)?: n
+Setting the TLS Protocol for the current session to TLS 1.3 if supported, else TLS 1.2.
+==> Validating and installing 64-bit azure-cli
+Azure CLI version 2.76.0 found in PATH at location: 'C:\Program Files\Microsoft SDKs\Azure\CLI2\wbin\az.cmd'
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Determining the bitness of Python at 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+==> 64-bit Azure CLI is already installed. Checking for updates...
+Azure CLI is up to date.
+Enabling long path support for python...
+==> Installing az cli extensions for Arc
+Extension 'arcappliance' 1.5.0 is already installed.
+Latest version of 'arcappliance' is already installed.
+Extension 'k8s-extension' 1.6.7 is already installed.
+Latest version of 'k8s-extension' is already installed.
+Extension 'customlocation' 0.1.4 is already installed.
+Latest version of 'customlocation' is already installed.
+Extension 'scvmm' 1.2.0 is already installed.
+Latest version of 'scvmm' is already installed.
+==> az --version
+azure-cli                         2.76.0
+
+core                              2.76.0
+telemetry                          1.1.0
+
+Extensions:
+arcappliance                       1.5.0
+customlocation                     0.1.4
+k8s-extension                      1.6.7
+scvmm                              1.2.0
+
+Dependencies:
+msal                            1.33.0b1
+azure-mgmt-resource               23.3.0
+
+Python location 'C:\Program Files\Microsoft SDKs\Azure\CLI2\python.exe'
+Config directory 'C:\Users\s_skhan\.azure'
+Extensions directory 'C:\Users\s_skhan\.azure\cliextensions'
+
+Python (Windows) 3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]
+
+Legal docs and information: aka.ms/AzureCliLegal
+
+
+Your CLI is up-to-date.
+==> Logging into azure
+Please login to Azure CLI.
+        * If you're running the script for the first time, select yes.
+        * If you've recently logged in to az while running the script, you can select no.
+Confirm login to azure cli?
+Yes(y)/No(n)?: n
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                    Step 1/5: Workstation was set up successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                     Step 2/5: Creating the Arc resource bridge
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+Using --force flag as all the required config files are present.
+==> Provide the details of the VMM Server on which the Azure Arc resource bridge VM will be deployed. These credentials will be used by the Azure Arc resource bridge to update and scale itself.
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username in the format domain\username where 'domain' should be the NetBIOS name of the domain (e.g. contoso\administrator): hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+Appliance Run called with --force. The CLI will clean up configuration files and resources, do you wish to continue? (y/n) y
+Deleting Appliance cluster
+Deleting the appliance...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceDelete","time":"2025-08-12T14:34:50-04:00"}
+Initializing chart values for provider: scvmm 2025-08-12T14:34:50-04:00 INFO    Inside SCVMM createClient
+2025-08-12T14:34:55-04:00       INFO    scvmmProvider: DeleteAppliance
+Appliance deletion was successful
+
+Appliance cluster successfully deleted
+Deleting Appliance ARM resource
+Appliance ARM resource successfully deleted
+Deleting configuration files
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+Deleting file: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+
+Create Config
+Starting createconfig
+Initializing chart values for provider: scvmm 2025-08-12T14:35:08-04:00 INFO    Inside SCVMM createClient
+2025-08-12T14:35:12-04:00       INFO    scvmmProvider: CreateConfig
+
+We recommend deploying the Azure Arc resource bridge as a highly available virtual machine for a production environment. Choosing 'Y' in the next prompt will deploy the Azure Arc resource bridge in a cluster to ensure high availability while choosing 'N' will deploy it as a standalone VM.
+
+Would you like to deploy the Azure Arc resource bridge as a highly available virtual machine? (Y/N): n
+
+Please select SCVMM library share (Ensure VMM server has write access on the selected Library Share):
+1) \\plib-02.hvi.brown.edu\Library
+2) \\plib-04.hvi.brown.edu\Library
+3) \\plib-06.hvi.brown.edu\Library
+4) \\pvmmlibcit.hvi.brown.edu\VMMLibraryFiles
+Enter number: 2
+You Selected: \\plib-04.hvi.brown.edu\Library
+
+Please select SCVMM host groups (Only host groups with Network configured are displayed):
+1) All Hosts
+2) All Hosts\CIT
+3) All Hosts\CIT\DMZ
+4) All Hosts\CIT\Starfish
+5) All Hosts\CIT\SDMZ
+6) All Hosts\CIT\DCPod
+7) All Hosts\CIT\Stronghold
+8) All Hosts\CIT\Internal
+Enter number: 8
+You Selected: All Hosts\CIT\Internal
+
+Please select SCVMM VM network (Only networks with IP pools configured are displayed):
+1) 10.4.10.0 (9c24dbec-9792-4de1-93bd-5b016900503c)
+2) 10.4.12.0 (d5c801b7-75e1-4773-a308-152d98de8da4)
+3) 10.4.128.0 (ada4129f-46cc-4ec4-be53-8f4833170504)
+4) 10.4.129.0 (2efa97d0-9461-4578-8b69-95de063e0fb8)
+5) 10.4.13.0 (442b3b5d-5426-4632-bd5f-735f889d69a5)
+6) 10.4.131.0 (456a1169-ceb0-4439-ac00-531a3bf9e379)
+7) 10.4.132.0 (7cfc1b1d-2e2e-46dc-a10e-7f407c7f2e96)
+8) 10.4.14.0 (1206db61-6b13-4dc1-836e-d8d9a8a45c82)
+9) 10.4.15.0 (bb1c2fe3-154d-435c-b408-d28b3a500b9d)
+10) 10.4.16.0 (06d04511-2f22-482d-8263-40e007b32355)
+11) 10.4.17.0 (af63df25-e3b3-48a0-9ba9-b1ba02c78b00)
+12) 10.4.18.0 (e064614b-8997-44f9-822a-ce0cda08df8a)
+13) 10.4.19.0 (4076f419-8bb8-4f3a-96f7-391c0f399144)
+14) 10.4.21.0 (7bed6f02-1832-4357-8cda-ddcfbd82cb63)
+15) 10.4.22.0 (56de407a-8b09-4bde-812c-7d504bc2b84b)
+16) 10.4.23.0 (3a831cc0-1e2b-496d-b607-de1a1bd90320)
+17) 10.4.24.0 (6c5763fe-6bb2-4ea5-ab07-fa3b3a9dec89)                                                                                                                                                          18) 10.4.25.0 (74b97480-bad5-4067-8d21-5b255f783a6a)                                                                                                                                                          19) 10.4.27.0 (1d20db5c-16ca-4d4b-81d5-d3702c0ce32a)                                                                                                                                                          20) 10.4.28.0 (95c5edb8-6953-4c72-a661-314e6f9448ba)                                                                                                                                                          21) 10.4.29.0 (b5506a32-da07-4b2d-a406-9bac9ea7c150)                                                                                                                                                          22) 10.4.32.0 (c7c99359-3b14-4fdd-a7b5-b3c98a8d77b9)                                                                                                                                                          23) 10.4.34.0 (f32d1547-e2ce-4ec7-87b8-197b979d83c7)                                                                                                                                                          24) 10.4.35.0 (74d7b4f1-7a6f-4bf0-bdb9-b1ad1cc49c91)                                                                                                                                                          25) 10.4.36.0 (c0edcd9a-1aa9-42a6-9033-36a83c84aa27)                                                                                                                                                          26) 10.4.41.0 (e1813a94-305b-43a7-86b2-fe01157144d5)                                                                                                                                                          27) 10.4.42.0 (20060810-a4b6-440f-9d05-99912623d7ae)                                                                                                                                                          28) 10.4.51.0 (b91b1334-0969-4ad1-80a6-e2befaa88c75)                                                                                                                                                          29) 10.4.6.0 (c9426633-13bd-4d2a-98ae-065fc0e8db6a)
+30) 192.168.201.0 (232420e7-3c4f-492c-a536-6ab1eccfc9d7)
+31) 192.168.21.0 (074aa28b-c808-42e8-b4dd-956bb553f22f)
+32) 192.168.25.0 (38d9f8f0-bbf6-474b-9132-067a99dad222)
+33) 192.168.8.0 (66afccfa-2201-4b3e-8a50-8e525979020e)
+34) 192.168.81.0 (543158ff-cc07-4bd4-9754-f768333a15be)
+35) 223.217.1.0 (0b4196c2-82f6-486d-afd0-b5611116c19d)
+36) HVI-ClusterNetwork (5ac4a308-7f1c-41eb-bb46-c34ae8b5fe68)
+37) HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)
+38) HVI-LiveMigration (3052a20c-4ee1-4528-8abd-97babe32e007)                                                                                                                                                  Enter number: 37                                                                                                                                                                                              You Selected: HVI-HostManagement (967be774-5fae-4f0a-8fb6-09c51896f8fb)                                                                                                                                                                                                                                                                                                                                                     Please select SCVMM Static IP Pool:                                                                                                                                                                           1) ClusterNetwork IP Address Pool (f6a97520-af99-4139-b1c2-1482a7c2046e)                                                                                                                                      2) HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)                                                                                                                                         3) LiveMigration IP Address Pool (0fbe9cde-ac34-4fae-a7cb-9e5808513d19)                                                                                                                                       Enter number: 2
+You Selected: HVI Host Management IP Pool (a3ed5a71-eef6-4e54-ab0e-b976cb4c3350)
+
+Please provide Appliance cluster configuration
+
+Please enter Arc Resource Bridge VM control plane IP: 10.4.38.20
+If your organization requires internet traffic to go through a proxy server, you need to configure the Arc resource bridge VM to use these proxy settings. Note that only a single Proxy URL can be configured for either HTTP or HTTPS proxy in Arc Resource Bridge VM. Do you want to configure the Arc resource Bridge VM proxy settings? (y/n) n
+
+All configuration files created successfully
+Appliance Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-appliance.yaml
+Resource Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-resource.yaml
+Infrastructure Configuration YAML was created here: C:\Code\vo-server\AzureArcBridge\CIT\arcbridge-hv-cit-prod-infra.yaml
+
+Starting validate
+Validating the appliance configuration...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceValidate","time":"2025-08-12T14:37:04-04:00"}                          Initializing chart values for provider: scvmm 2025-08-12T14:37:04-04:00 INFO    Inside SCVMM createClient                                                                                                     2025-08-12T14:37:09-04:00       INFO    Performing provider validations                                                                                                                                       2025-08-12T14:37:09-04:00       INFO    scvmmProvider: Validate                                                                                                                                               2025-08-12T14:38:51-04:00       INFO    Testing working directory                                                                                                                                             2025-08-12T14:38:51-04:00       INFO    Testing proxy settings                                                                                                                                                2025-08-12T14:38:51-04:00       INFO    Testing content delivery network connectivity                                                                                                                         2025-08-12T14:38:52-04:00       INFO    Performing provider validations
+2025-08-12T14:38:52-04:00       INFO    scvmmProvider: Validate
+2025-08-12T14:40:27-04:00       INFO    Testing proxy settings
+2025-08-12T14:40:27-04:00       INFO    Testing content delivery network connectivity
+2025-08-12T14:40:28-04:00       INFO    Validation completed successfully
+2025-08-12T14:40:28-04:00       INFO    Discovering kubernetes version...
+2025-08-12T14:40:28-04:00       INFO    The discovered kubernetes version is v1.30.4
+2025-08-12T14:40:28-04:00       INFO    DownloadImage: Discovering image download information...
+2025-08-12T14:40:28-04:00       INFO    DownloadImage: Downloading and validating image (destination dir: C:\Users\s_skhan\AppData\Local\Temp\canary-image3935459498\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42557965143)...
+2025-08-12T14:40:31-04:00       INFO    DownloadImage: Successfully downloaded canary image, filenames : [C:\Users\s_skhan\AppData\Local\Temp\canary-image3935459498\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42557965143\mariner-canary-v82520617.vhdx.zip C:\Users\s_skhan\AppData\Local\Temp\canary-image3935459498\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42557965143\mariner-canary-v82520617.vhdx.zip-companion.rpm]
+2025-08-12T14:40:31-04:00       INFO    Successfully downloaded image C:\Users\s_skhan\AppData\Local\Temp\canary-image3935459498\image-arc-appliance-stable-catalogs-ext-stable-0.1.38.10422-1.30.42557965143\mariner-canary-v82520617.vhdx.zip in 3.798747 seconds
+2025-08-12T14:40:31-04:00       INFO    Provisioning canary image ad608b9b-01e1-487e-915e-43b97689a32e
+2025-08-12T14:40:32-04:00       INFO    ProvisionImage: SCVMM: Starting ImageProvisioning to SCVMM Library ....
+2025-08-12T14:40:35-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx to VMM Server
+2025-08-12T14:40:40-04:00       INFO    ProvisionImage: SCVMM: Copying mariner vhdx from VMM Server to Library Share
+2025-08-12T14:40:57-04:00       INFO    ProvisionImage: SCVMM: Image Provision is successful
+2025-08-12T14:40:57-04:00       INFO    Successfully uploaded the canary image ad608b9b-01e1-487e-915e-43b97689a32e.vhdx to cloud fabric in 25.093372 seconds
+2025-08-12T14:40:57-04:00       INFO    Performing provider validations on canary image
+2025-08-12T14:40:57-04:00       INFO    Provider validations on canary image completed successfully
+2025-08-12T14:40:57-04:00       INFO    Deprovisioning canary image ad608b9b-01e1-487e-915e-43b97689a32e
+2025-08-12T14:40:57-04:00       INFO    Discovering kubernetes version...                                                                                                                                     2025-08-12T14:40:57-04:00       INFO    The discovered kubernetes version is v1.30.4                                                                                                                          2025-08-12T14:40:57-04:00       INFO    DeprovisionImage: SCVMM: Deprovision vhdx form library share....                                                                                                      2025-08-12T14:41:00-04:00       INFO    Successfully deprovisioned the canary image ad608b9b-01e1-487e-915e-43b97689a32e.vhdx to cloud fabric in 3.034158 seconds                                             2025-08-12T14:41:00-04:00       INFO    Validation completed successfully                                                                                                                                     Appliance configuration validation was successful                                                                                                                                                                                                                                                                                                                                                                           
+Starting prepare
+
+Downloading the Azure Arc resource bridge image and uploading it to the local image gallery.
+This is a long running process that is dependent on network speed. Please let the process run to completion.
+
+Preparing the appliance configuration...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcAppliancePrepare","time":"2025-08-12T14:41:00-04:00"}                           Initializing chart values for provider: scvmm 2025-08-12T14:41:00-04:00 INFO    Inside SCVMM createClient                                                                                                     2025-08-12T14:41:05-04:00       INFO    Performing provider validations                                                                                                                                       2025-08-12T14:41:05-04:00       INFO    scvmmProvider: Validate                                                                                                                                               2025-08-12T14:42:50-04:00       INFO    Testing proxy settings                                                                                                                                                2025-08-12T14:42:50-04:00       INFO    Testing content delivery network connectivity                                                                                                                         2025-08-12T14:42:50-04:00       INFO    Validation completed successfully                                                                                                                                     2025-08-12T14:42:50-04:00       INFO    Discovering kubernetes version...
+2025-08-12T14:42:50-04:00       INFO    The discovered kubernetes version is v1.30.4
+Appliance configuration was prepared successfully
+
+
+Starting to create ARM resource of Arc Resource Bridge in Azure.
+Completed creation of ARM resource.
+
+Starting deployment of Arc Resource Bridge on-prem cluster.
+
+*****************************************************************************************************************************************
+LEGAL NOTICE
+Azure Arc Resource Bridge is licensed to you as part of your Azure subscription and subject to the "Use of Software with the
+Online Service" section of the Microsoft Product Terms. Your Azure subscription will be billed for fees and applicable taxes
+associated with use of Azure resources and services deployed and/or utilized by the Azure Arc Appliance until your use
+is discontinued.
+*****************************************************************************************************************************************
+
+Creating the appliance...
+
+{"file":"C:/__w/1/s/pkg/appliance/client.go:347","func":"prepForKVA","level":"info","msg":"Running validation for command: ArcApplianceDeploy","time":"2025-08-12T14:43:25-04:00"}
+Initializing chart values for provider: scvmm {"file":"C:/__w/1/s/pkg/appliance/util.go:98","func":"addAzureData","level":"info","msg":"Adding azure data for ArcApplianceDeploy","time":"2025-08-12T14:43:25-04:00"}
+{"file":"C:/__w/1/s/pkg/appliance/util.go:113","func":"addAzureData","level":"info","msg":"Adding agent version mcr.microsoft.com/azurearck8s/batch1/stable/appliance/v2/azure-arc-k8sagents:0.36.1-appliance","time":"2025-08-12T14:43:25-04:00"}
+2025-08-12T14:43:25-04:00       INFO    Inside SCVMM createClient
+2025-08-12T14:43:41-04:00       INFO    scvmmProvider: CloudInit
+2025-08-12T14:43:42-04:00       INFO    scvmmProvider: DeployAppliance
+2025-08-12T14:47:00-04:00       INFO    scvmmProvider: Waiting for Appliance VM IP is
+2025-08-12T14:47:35-04:00       INFO    scvmmProvider: Management IP is '10.4.38.181'
+2025-08-12T14:47:35-04:00       INFO    Connecting to remote host IP 10.4.38.181
+2025-08-12T14:47:35-04:00       INFO    Connection established to remote host IP 10.4.38.181
+2025-08-12T14:47:35-04:00       INFO    Copying files from remote host IP : 10.4.38.181
+2025-08-12T14:47:51-04:00       INFO    Diagnostics checker Output :    {"Result : ": "diagnostics succeeded without any error"}
+2025-08-12T14:47:51-04:00       INFO    provider: Validating VIP 10.4.38.20:22 connectivity from host
+2025-08-12T14:49:06-04:00       INFO    core: Waiting for API server
+2025-08-12T14:49:06-04:00       INFO    core: Waiting for pod 'Cloud Operator' to be ready
+2025-08-12T14:50:45-04:00       INFO    core: Waiting for pod 'Cluster API core' to be ready
+2025-08-12T14:51:02-04:00       INFO    core: Waiting for pod 'Bootstrap kubeadm' to be ready
+2025-08-12T14:51:05-04:00       INFO    core: Waiting for pod 'Control Plane kubeadm' to be ready
+2025-08-12T14:51:06-04:00       INFO    Installing KVA Image Operator on the appliance
+2025-08-12T14:51:06-04:00       INFO    Performing provider validations
+2025-08-12T14:51:06-04:00       INFO    scvmmProvider: Validate
+2025-08-12T14:52:52-04:00       INFO    Testing proxy settings
+2025-08-12T14:52:52-04:00       INFO    Testing content delivery network connectivity
+2025-08-12T14:52:53-04:00       INFO    Validation completed successfully
+2025-08-12T14:52:53-04:00       INFO    Discovering Kva Image operator download information...
+2025-08-12T14:53:07-04:00       INFO    successfully created/upgraded KVA Image Operator!
+2025-08-12T14:53:07-04:00       INFO    core: Waiting for deployment 'kvaio-controller-manager' to be ready
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for Cluster '6ec5589a7131f69bfcd78653faa75512cf239253eb5dc' to be provisioned
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for Control Plane '6ec5589a7131f69bfcd78653faa75512cf239253eb5dc' to be in running state
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for Arc Agents
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for deployment 'appliance-connect-agent' to be scheduled
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for deployment 'clusterconnect-agent' to be ready
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for deployment 'config-agent' to be scheduled
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for deployment 'extension-manager' to be ready
+2025-08-12T14:53:31-04:00       INFO    core: Waiting for secret 'appliance-public-key' to be created
+2025-08-12T14:53:31-04:00       INFO    Addon appliances-azure-arc-monitoring Helm release is available
+2025-08-12T14:53:31-04:00       INFO    Addon calico provisioned in 5.8974ms
+2025-08-12T14:53:31-04:00       INFO    Addon etcd-metrics-proxy provisioned in 6.2327ms
+2025-08-12T14:53:31-04:00       INFO    Addon kube-vip provisioned in 4.3542ms
+Successfully saved kubeconfig to: kubeconfig
+Appliance creation was successful
+
+Cluster successfully deployed.
+
+Starting to update the ARM resource of Arc Resource Bridge in Azure.
+
+Polling for Appliance to reach Running status
+Appliance Provisioning State and Status: Succeeded, WaitingForHeartbeat
+Appliance Provisioning State and Status: Succeeded, WaitingForHeartbeat
+Appliance Provisioning State and Status: Succeeded, WaitingForHeartbeat
+Appliance Provisioning State and Status: Succeeded, Connecting
+Appliance Provisioning State and Status: Succeeded, Connecting
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Connected
+Appliance Provisioning State and Status: Succeeded, Running
+IMPORTANT! Please save the configuration files for maintenance operations of Arc Resource Bridge like upgrade, credential rotation!
+Find more information on the name and path of configuration files at https://aka.ms/arb-config.
+Waiting for the appliance to be ready...
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                  Step 2/5: Arc resource bridge is up and running
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                       Step 3/5: Installing cluster extension
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+{
+  "aksAssignedIdentity": null,
+  "autoUpgradeMinorVersion": true,
+  "configurationProtectedSettings": {},
+  "configurationSettings": {
+    "Microsoft.CustomLocation.ServiceAccount": "azure-vmmoperator"
+  },
+  "currentVersion": "1.0.1401",
+  "customLocationSettings": null,
+  "errorInfo": null,
+  "extensionType": "microsoft.scvmm",
+  "id": "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ResourceConnector/appliances/arcbridge-hv-cit-prod/providers/Microsoft.KubernetesConfiguration/extensions/azure-vmmoperator",
+  "identity": {
+    "principalId": "eecbb6c8-6096-40b9-966d-be04c79de220",
+    "tenantId": null,
+    "type": "SystemAssigned"
+  },
+  "isSystemExtension": false,
+  "name": "azure-vmmoperator",
+  "packageUri": null,
+  "plan": null,
+  "provisioningState": "Succeeded",
+  "releaseTrain": "Stable",
+  "resourceGroup": "rg-arc-hv",
+  "scope": {
+    "cluster": {
+      "releaseNamespace": "azure-vmmoperator"
+    },
+    "namespace": null
+  },
+  "statuses": [],
+  "systemData": {
+    "createdAt": "2025-08-12T18:59:52.660384+00:00",
+    "createdBy": null,
+    "createdByType": null,
+    "lastModifiedAt": "2025-08-12T18:59:52.660384+00:00",
+    "lastModifiedBy": null,
+    "lastModifiedByType": null
+  },
+  "type": "Microsoft.KubernetesConfiguration/extensions",
+  "version": null
+}
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                 Step 3/5: Cluster extension installed successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                         Step 4/5: Creating custom location
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+{
+  "authentication": {
+    "type": null,
+    "value": null
+  },
+  "clusterExtensionIds": [
+    "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ResourceConnector/appliances/arcbridge-hv-cit-prod/providers/Microsoft.KubernetesConfiguration/extensions/azure-vmmoperator"
+  ],
+  "displayName": "cl-hv-cit-prod",
+  "hostResourceId": "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ResourceConnector/appliances/arcbridge-hv-cit-prod",
+  "hostType": "Kubernetes",
+  "id": "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ExtendedLocation/customLocations/cl-hv-cit-prod",
+  "identity": null,
+  "location": "eastus",
+  "name": "cl-hv-cit-prod",
+  "namespace": "cl-hv-cit-prod",
+  "provisioningState": "Succeeded",
+  "resourceGroup": "rg-arc-hv",
+  "systemData": {
+    "createdAt": "2025-08-12T19:01:38.569560+00:00",
+    "createdBy": "adm_skhan130@ad.brown.edu",
+    "createdByType": "User",
+    "lastModifiedAt": "2025-08-12T19:01:38.569560+00:00",
+    "lastModifiedBy": "adm_skhan130@ad.brown.edu",
+    "lastModifiedByType": "User"
+  },
+  "tags": {
+    "Datacenter": "CIT",
+    "Environmnet": "Production"
+  },
+  "type": "Microsoft.ExtendedLocation/customLocations"
+}
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                   Step 4/5: Custom location created successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                          Step 5/5: Connecting to VMMServer
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+==> Provide the details of the VMM server that will be connected to Azure using the deployed Azure Arc resource bridge.
+        * These credentials will be used when you perform SCVMM operations through Azure.
+        * You can connect the same VMM server on which the Azure Arc resource bridge VM is deployed by providing the same credentials as in Step 2.
+
+Attempt to Connect to VMM Server... (1/3)
+
+Please enter SCVMM Server FQDN (e.g. vmmuser001.contoso.lab) or IPv4 address. If you have a Highly Available VMM setup, enter the role name: phvmmcit.hvi.brown.edu
+Please enter SCVMM port (press enter to use default port 8100):
+Please enter SCVMM Administrator Username: hvi\svc_scvmmautomation
+Please enter SCVMM Administrator Password: **********************
+Please confirm SCVMM Administrator Password: **********************
+
+SCVMM Server Details:
+SCVMM Server FQDN/IP: phvmmcit.hvi.brown.edu
+SCVMM Port: 8100
+SCVMM Administrator Username: hvi\svc_scvmmautomation
+
+Confirm SCVMM Server details?
+Yes(y)/No(n)?: y
+{
+  "extendedLocation": {
+    "name": "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ExtendedLocation/customLocations/cl-hv-cit-prod",
+    "type": "customLocation"
+  },
+  "id": "/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ScVmm/vmmServers/scvmm-hv-cit-prod",
+  "location": "eastus",
+  "name": "scvmm-hv-cit-prod",
+  "properties": {
+    "connectionStatus": "Connected",
+    "credentials": {
+      "password": null,
+      "username": "hvi\\svc_scvmmautomation"
+    },
+    "errorMessage": null,
+    "fqdn": "phvmmcit.hvi.brown.edu",
+    "port": 8100,
+    "provisioningState": "Succeeded",
+    "uuid": "cbb241f9-c785-49d8-85a2-9262c6971d62",
+    "version": "10.22.1287.0"
+  },
+  "resourceGroup": "rg-arc-hv",
+  "systemData": {
+    "createdAt": "2025-08-12T19:04:04.002077+00:00",
+    "createdBy": "adm_skhan130@ad.brown.edu",
+    "createdByType": "User",
+    "lastModifiedAt": "2025-08-12T19:04:30.133829+00:00",
+    "lastModifiedBy": "319f651f-7ddb-4fc6-9857-7aef9250bd05",
+    "lastModifiedByType": "Application"
+  },
+  "tags": {
+    "Datacenter": "CIT",
+    "Environmnet": "Production"
+  },
+  "type": "microsoft.scvmm/vmmservers"
+}
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+                   Step 5/5: VMMServer was connected successfully
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+
+
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+              Your SCVMM has been successfully onboarded to Azure Arc!
+ 0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-0-
+
+To continue onboarding and to complete Arc enabling your SCVMM resources, view your VMMServer resource in Azure portal.
+https://portal.azure.com/#resource/subscriptions/1d811949-f211-41d3-9a5d-df01d8c44397/resourceGroups/rg-arc-hv/providers/Microsoft.ScVmm/vmmServers/scvmm-hv-cit-prod/overview
+|  31.18m| 14|C:\..\CIT|#

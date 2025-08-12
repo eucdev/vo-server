@@ -1,0 +1,148 @@
+cloudName: AzureCloud
+controlplaneendpoint: 10.4.38.20
+location: eastus
+lowprivilegekubeconfig: true
+managementKeys:
+  diagnosticsKey:
+    certificate: 'ssh-rsa-cert-v01@openssh.com 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
+
+      '
+    privateKey: '-----BEGIN RSA PRIVATE KEY-----
+
+      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
+
+      -----END RSA PRIVATE KEY-----
+
+      '
+  trustedUserCAKey:
+    publicKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDnzAggSqhCJHfhu4+K3zRHd05RnlrqZGqnF7WxNa4oa45b+sl+j1c/qAB7H6o+tzmeshUD541rJRLIEJ/vXzC9elgq9PiQKuYB6zVOYIdwHb3WiOdiZnBK82Y9e6kqKKyiLKwbns69vfWVJE4TIwIAfHBJ0BqPVNF7DkLK6Yk/AUiQrx+8cXEeB2BPsZfNHMTXjRP+FA+Zmtxx89l3sTKid7UaFCpNoYupCB9BydJqVdn5+2KNe1aG6sxokMjV+sMDpGdm2zqHbGPIe7NDyyUpK3R1CgGPhdpQovdFdSEQZWqgfhQS2ijt1rox49JeMEyQRU8FgR73TfBqqSHfmakAFyIiH60VM27jVdeVhFgvDt+ZXfquCcXeBDy7fcy+18Ao/6Ms1+Fnu5dQHHBZW9kiXhNxY5ubNH6xBMKYDqA3cLuer5oJLhtlHuT5A9GLhu34+qhlxqLM4Xwh3p/BG4M5HTIm+fr0tSyzfqKj36rB/hki06ku5cOoqL9hUgB6308Mgads2aKAOcE9X7mk9pfyVqAUKvB0Z7JUishhBbPet2OQcwy1yTzxD5l0HimBMr+J0FJlTuivUkO4n3NWQL/5faqUNROx4LeeFhl6QhtYGqHRPQGHRTzXXnwijVkc3UCVnIYB1DtpzFAjk/oOTdGdOSSuNEoMFZjTmG6mon8rAQ==
+resourceGroup: rg-arc-hv
+resourceName: arcbridge-hv-cit-prod
+scvmmprovider:
+  appliancevm:
+    cloudid: ''
+    highlyavailable: false
+    hostgroupid: 01d77ac0-fe6d-4390-9798-ff9c0411e08c
+    memorymib: 16384
+    network:
+      dnsservers:
+      - 10.1.1.10
+      gateway: 10.4.38.1
+      ipaddressprefix: 10.4.38.0/24
+      ippoolid: a3ed5a71-eef6-4e54-ab0e-b976cb4c3350
+      k8snodeippoolend: 10.4.38.220
+      k8snodeippoolstart: 10.4.38.105
+      vmnetworkid: 967be774-5fae-4f0a-8fb6-09c51896f8fb
+    numcpus: 4
+  contentlibrary:
+    librarysharepath: \\plib-04.hvi.brown.edu\Library
+  credentials:
+    fqdn: phvmmcit.hvi.brown.edu
+    password: REDACTED
+    serverport: 8100
+    username: hvi\svc_scvmmautomation
+subscriptionID: 1d811949-f211-41d3-9a5d-df01d8c44397
+telemetryConfig:
+  applianceMetadata: '{"proxyConfig": "noproxy", "networkType": "static", "applianceVM":
+    {"numCpus": "4", "memoryMib": "16384"}, "providerMetadata": {"SCVMM": {"deployTarget":
+    "hostgroup", "highlyavailable": "False", "ipSource": "vmmIpPool", "vlanId": ""}}}'
+  traceID: fe9796f7-bdf8-4de8-99e8-5650b9501302
+tenantID: 3fc7006e-b987-4e66-bac3-3d6f0cb863b0
+validationConfig:
+  type: All

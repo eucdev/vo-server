@@ -1,0 +1,5 @@
+resource:
+  location: eastus
+  name: arcbridge-hv-cit-prod
+  resource_group: rg-arc-hv
+  subscription: 1d811949-f211-41d3-9a5d-df01d8c44397

@@ -1,0 +1,4 @@
+applianceClusterConfig:
+  controlPlaneEndpoint: 10.4.38.20
+applianceResourceFilePath: arcbridge-hv-cit-prod-resource.yaml
+infrastructureConfigPath: arcbridge-hv-cit-prod-infra.yaml

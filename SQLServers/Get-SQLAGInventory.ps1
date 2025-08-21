@@ -20,7 +20,7 @@ param(
   [hashtable]$EnvironmentMap = @{ CIT = 'CIT'; ANMA = 'ANMA'; QA = 'QA' },
   [string]$OutDir = 'C:\Code\vo-server\SQLServers'
 )
-$Instances = 'QSQL-02', 'QSQL-04', 'QSQL-06'
+# $Instances = 'QSQL-02', 'QSQL-04', 'QSQL-06'
 $EnvironmentMap = @{ QSQL = 'QA' }   # matches any instance name containing "QSQL"
 $outDir = 'C:\Code\vo-server\SQLServers\QA_' + (Get-Date -Format yyyyMMdd_HHmm)
 
@@ -217,7 +217,6 @@ foreach ($inst in $Instances) {
   foreach ($row in Invoke-TSql $inst $Q_Listeners) { $row | Add-Member env $envLabel -PassThru | Add-Member SourceInstance $inst -PassThru | Add-Member Collected $now -PassThru | ForEach-Object { $allListeners += $_ } }
   foreach ($row in Invoke-TSql $inst $Q_AGDatabases) { $row | Add-Member env $envLabel -PassThru | Add-Member SourceInstance $inst -PassThru | Add-Member Collected $now -PassThru | ForEach-Object { $allAGDb += $_ } }
 }
-
 # ---------- Export ----------
 $allServer   | Export-Csv -NoTypeInformation -Encoding UTF8 -Path (Join-Path $OutDir '01_ServerInfo.csv')
 $allHost     | Export-Csv -NoTypeInformation -Encoding UTF8 -Path (Join-Path $OutDir '02_HostOS.csv')

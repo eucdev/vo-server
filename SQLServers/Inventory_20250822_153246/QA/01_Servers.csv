@@ -1,0 +1,4 @@
+﻿"Env","Host","InstanceName","Edition","ProductVersion","ProductLevel","MachineName","NetBIOS","IsClustered","HadrManagerStatus","WindowsRelease","WindowsSKU","OS_Language","HostPlatform","HostDistribution","HostRelease","HostSPLevel","SourceInstance","Collected"
+"QA","QSQL-02","","Enterprise Edition: Core-based Licensing (64-bit)","16.0.1000.6","RTM","qsql-02","QSQL-02","0","1","10.0","7","1033","Windows","Windows Server 2022 Standard","10.0","","QSQL-02","8/22/2025 3:32:46 PM"
+"QA","QSQL-04","","Enterprise Edition: Core-based Licensing (64-bit)","16.0.1000.6","RTM","qsql-04","QSQL-04","0","1","10.0","7","1033","Windows","Windows Server 2022 Standard","10.0","","QSQL-04","8/22/2025 3:32:46 PM"
+"QA","QSQL-06","","Enterprise Edition: Core-based Licensing (64-bit)","16.0.1000.6","RTM","qsql-06","QSQL-06","0","1","10.0","7","1033","Windows","Windows Server 2022 Standard","10.0","","QSQL-06","8/22/2025 3:32:46 PM"

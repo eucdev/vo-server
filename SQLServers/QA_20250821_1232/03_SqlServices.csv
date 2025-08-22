@@ -1,3 +1,0 @@
-﻿"env","SourceInstance","Collected","servicename","startup_type_desc","status_desc","last_startup_time","service_account"
-"QA","QSQL-06","8/21/2025 12:33:31 PM","SQL Server (MSSQLSERVER)","Automatic","Running","8/12/2025 11:38:22 PM -04:00","hvi\gMSA_sql_qa$"
-"QA","QSQL-06","8/21/2025 12:33:31 PM","SQL Server Agent (MSSQLSERVER)","Automatic","Running","","hvi\gMSA_sql_qa$"

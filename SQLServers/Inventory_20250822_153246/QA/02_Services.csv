@@ -1,0 +1,7 @@
+﻿"Env","Host","ServiceName","StartupType","Status","LastStartupTime","ServiceAccount","SourceInstance","Collected"
+"QA","QSQL-02","SQL Server (MSSQLSERVER)","Automatic","Running","8/12/2025 7:33:21 PM -04:00","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"
+"QA","QSQL-02","SQL Server Agent (MSSQLSERVER)","Automatic","Running","","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"
+"QA","QSQL-04","SQL Server (MSSQLSERVER)","Automatic","Running","8/12/2025 9:18:27 PM -04:00","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"
+"QA","QSQL-04","SQL Server Agent (MSSQLSERVER)","Automatic","Running","","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"
+"QA","QSQL-06","SQL Server (MSSQLSERVER)","Automatic","Running","8/12/2025 11:38:22 PM -04:00","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"
+"QA","QSQL-06","SQL Server Agent (MSSQLSERVER)","Automatic","Running","","hvi\gMSA_sql_qa$",,"8/22/2025 3:32:46 PM"

@@ -17,11 +17,11 @@ param(
     'PSQL-01', 'PSQL-03', 'PSQL-05',
     'QSQL-02', 'QSQL-04', 'QSQL-06'
   ),
-  [hashtable]$EnvironmentMap = @{ CIT = 'CIT'; ANMA = 'ANMA'; QA = 'QA' },
+  [hashtable]$EnvironmentMap = @{},
   [string]$OutDir = 'C:\Code\vo-server\SQLServers'
 )
 # $Instances = 'QSQL-02', 'QSQL-04', 'QSQL-06'
-$EnvironmentMap = @{ QSQL = 'QA' }   # matches any instance name containing "QSQL"
+# $EnvironmentMap = @{ QSQL = 'QA' }   # matches any instance name containing "QSQL"
 $outDir = 'C:\Code\vo-server\SQLServers\QA_' + (Get-Date -Format yyyyMMdd_HHmm)
 
 
@@ -29,9 +29,25 @@ $null = New-Item -ItemType Directory -Path $OutDir -Force
 
 function Get-EnvLabel {
   param([string]$Instance)
-  foreach ($k in $EnvironmentMap.Keys) {
-    if ($Instance -match [Regex]::Escape($k)) { return $EnvironmentMap[$k] }
+
+  # Normalize: strip named instance and domain, make uppercase
+  $hostnode = ($Instance -split '\\')[0]          # remove \InstanceName if present
+  $hostnode = $hostnode.Split('.')[0].ToUpper()       # remove domain if FQDN
+
+  # QA: any node starting with Q (e.g., QSQL-02)
+  if ($hostnode -match '^Q[A-Z]*-') { return 'QA' }
+
+  # Prod: nodes starting with P, decide by node number (even=CIT, odd=ANMA)
+  if ($hostnode -match '^P[A-Z]*-(\d+)$') {
+    $n = [int]$Matches[1]
+    return (if ($n % 2 -eq 0) { 'CIT' } else { 'ANMA' })
   }
+
+  # Fallback to your hashtable (if you keep EnvironmentMap)
+  foreach ($k in $EnvironmentMap.Keys) {
+    if ($hostnode -like "*$($k.ToUpper())*") { return $EnvironmentMap[$k] }
+  }
+
   return 'UNKNOWN'
 }
 

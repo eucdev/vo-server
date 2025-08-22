@@ -1,0 +1,4 @@
+﻿"Env","Host","Cluster","MemberName","MemberType","MemberState","Collected"
+"QA","QSQL-06","QCSQLCIT","qsql-02","CLUSTER_NODE","UP","8/22/2025 3:32:46 PM"
+"QA","QSQL-06","QCSQLCIT","qsql-04","CLUSTER_NODE","UP","8/22/2025 3:32:46 PM"
+"QA","QSQL-06","QCSQLCIT","qsql-06","CLUSTER_NODE","UP","8/22/2025 3:32:46 PM"

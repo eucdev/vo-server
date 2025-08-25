@@ -138,6 +138,17 @@ function Grant-WmiRights_OEMScope {
     }
   }
 }
+<#
+# Grant-WmiRights_OEMScope
+# monitoring only (no OEM job execution from cimv2)
+# Grant-WmiRights_OEMScope -ComputerName 'qsql-02' -Account 'AD\svc_oemagt' -Confirm:$false # Ran this 
+# Grant-WmiRights_OEMScope -ComputerName qsql-02,qsql-04,qsql-06 -Account 'AD\svc_oemagt' -Confirm:$false
+# Or we can define array in the start
+# $servers = @('qsql-02','qsql-04','qsql-06')
+# Grant-WmiRights_OEMScope -ComputerName $servers -Account 'AD\svc_oemagt' -Confirm:$false
+# Check with Chris if OEM will also execute jobs. If yes, re run the function and add Execute on cimv2 too
+# Grant-WmiRights_OEMScope -ComputerName 'qsql-02' -Account 'AD\svc_oemagt' -IncludeExecuteOnCimv2 -Verbose -Confirm:$false
+#>
 
 function Grant-RegistryRights_OEM {
   <#
@@ -259,8 +270,16 @@ function Grant-RegistryRights_OEM {
     }
   }
 }
+<#
+# Grant-RegistryRights_OEM
+# One server
+# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -Confirm:$false # Ran this
+# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -UseRemoteRegistry -Confirm:$false
+# Many servers
+# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02, qsql-04, qsql-06 -Confirm:$false
+#>
 
-function Show-DcomLaunchEffectiveRemote {
+function Get-DcomLaunchEffective_OEMScope {
   [CmdletBinding()]
   param(
     [Parameter(Mandatory)]
@@ -353,8 +372,6 @@ function Show-DcomLaunchEffectiveRemote {
     }
   }
 }
-
-
 <#
 # After adding SQL server to SQL_OEM_WMI_DCOM, we might need to Force refresh + refresh the computer account’s token:
 # gpupdate /force
@@ -362,59 +379,39 @@ function Show-DcomLaunchEffectiveRemote {
 # We can also see these settings getting applied at
 # reg query "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DCOM" /v MachineLaunchRestriction
 
-
 # Check to confirm settings have been applied
 $servers = 'qsql-02','qsql-04','qsql-06'
-Show-DcomLaunchEffectiveRemote -ComputerName $servers -MatchAccount 'SQL_OEM_WMI_DCOM' |
+Get-DcomLaunchEffective_OEMScope -ComputerName $servers -MatchAccount 'SQL_OEM_WMI_DCOM' |
   Format-Table Computer,Source,Account,RemoteLaunch,RemoteActivation -Auto
 #>
 
-# Grant-WmiRights_OEMScope
-# monitoring only (no OEM job execution from cimv2)
-# Grant-WmiRights_OEMScope -ComputerName 'qsql-02' -Account 'AD\svc_oemagt' -Confirm:$false # Ran this 
-# Grant-WmiRights_OEMScope -ComputerName qsql-02,qsql-04,qsql-06 -Account 'AD\svc_oemagt' -Confirm:$false
-# Or we can define array in the start
-# $servers = @('qsql-02','qsql-04','qsql-06')
-# Grant-WmiRights_OEMScope -ComputerName $servers -Account 'AD\svc_oemagt' -Confirm:$false
-# Check with Chris if OEM will also execute jobs. If yes, re run the function and add Execute on cimv2 too
-# Grant-WmiRights_OEMScope -ComputerName 'qsql-02' -Account 'AD\svc_oemagt' -IncludeExecuteOnCimv2 -Verbose -Confirm:$false
-
-
-# Grant-RegistryRights_OEM
-# One server
-# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -Confirm:$false # Ran this
-# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -UseRemoteRegistry -Confirm:$false
-# Many servers
-# Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02, qsql-04, qsql-06 -Confirm:$false
-
-
-
-
-
-
-
-
-
-function Test-WmiRights_OEMScope {
+function Get-WmiRights_OEMScope {
   [CmdletBinding()]
   param(
     [Parameter(Mandatory)][string[]]$ComputerName,
-    [Parameter(Mandatory)][string]$Account,
-    [switch]$IncludeExecuteOnCimv2,     # matches your Grant function
+    [Parameter(Mandatory)][string]$Account,          # e.g. 'AD\svc_oemagt' or 'HVI\SQL_OEM_WMI_DCOM'
+    [switch]$IncludeExecuteOnCimv2,                  # if OEM will execute jobs via cimv2
+    [switch]$OnlyFailures,                           # show only failing rows
     [pscredential]$Credential
   )
 
-  $BIT_EXECUTE = 0x0002
-  $BIT_ENABLE = 0x0001
-  $BIT_REMOTE = 0x0020
-  $REQ_DEFAULT = $BIT_ENABLE -bor $BIT_EXECUTE -bor $BIT_REMOTE
+  # Required masks
+  $BIT_ENABLE = 0x0001    # Enable Account
+  $BIT_EXEC = 0x0002    # Execute Methods
+  $BIT_REMOTE = 0x0020    # Remote Enable
+
+  $REQ_DEFAULT = $BIT_ENABLE -bor $BIT_EXEC -bor $BIT_REMOTE
   $REQ_SQL = $REQ_DEFAULT
   $REQ_CIMV2 = if ($IncludeExecuteOnCimv2) { $REQ_DEFAULT } else { $BIT_ENABLE -bor $BIT_REMOTE }
 
   $sb = {
-    param($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL)
+    param($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL, $OnlyFailures)
 
-    function ReadAcl($ns) {
+    # Local copies of bit flags for readability
+    $BIT_ENABLE = 0x0001; $BIT_EXEC = 0x0002; $BIT_REMOTE = 0x0020
+    $ACE_CI = 0x02; $ACE_INH = 0x10
+
+    function Get-SD($ns) {
       try {
         $scope = New-Object System.Management.ManagementScope("\\$env:COMPUTERNAME\$ns"); $scope.Connect()
         $sec = New-Object System.Management.ManagementClass($scope, (New-Object System.Management.ManagementPath('__SystemSecurity')), $null)
@@ -425,102 +422,295 @@ function Test-WmiRights_OEMScope {
       catch { return $null }
     }
 
-    # Resolve SID
+    function Get-AllChildren($root) {
+      $q = New-Object System.Collections.Generic.Queue[string]
+      $q.Enqueue($root)
+      $seen = New-Object System.Collections.Generic.HashSet[string]
+      [void]$seen.Add($root)
+      $all = @()
+      while ($q.Count) {
+        $cur = $q.Dequeue()
+        if ($cur -ne $root) { $all += $cur }
+        try {
+          Get-CimInstance -Namespace $cur -Class __NAMESPACE -ErrorAction Stop |
+          ForEach-Object {
+            $child = "$cur\$($_.Name)"
+            if ($seen.Add($child)) { $q.Enqueue($child) }
+          }
+        }
+        catch {}
+      }
+      $all
+    }
+
+    # Resolve SID on the target
     try {
-      $sid = (New-Object System.Security.Principal.NTAccount($Account)).Translate([System.Security.Principal.SecurityIdentifier])
+      if ($Account -match '^S-\d-') { $sid = New-Object System.Security.Principal.SecurityIdentifier($Account) }
+      else { $sid = (New-Object System.Security.Principal.NTAccount($Account)).Translate([System.Security.Principal.SecurityIdentifier]) }
       $sidBytes = New-Object 'byte[]' ($sid.BinaryLength); $sid.GetBinaryForm($sidBytes, 0)
       $sidKey = ($sidBytes -join ',')
     }
     catch { throw "[$env:COMPUTERNAME] Cannot resolve [$Account] to SID: $($_.Exception.Message)" }
 
-    function Eval-NS($ns, [int]$required, [bool]$expectPropagate) {
-      $sd = ReadAcl $ns
+    function Check-Namespace($ns, [int]$required, [bool]$expectPropagate) {
+      $sd = Get-SD $ns
       if (-not $sd) {
         return [pscustomobject]@{
-          Computer = $env:COMPUTERNAME; Namespace = $ns; RequiredMask = ('0x{0:X}' -f $required)
-          AccessMask = ''; HasRequired = $false; Source = 'ERROR'; Propagates = $false; ExpectPropagate = $expectPropagate
-          PASS = $false; Note = 'Cannot read security descriptor'
+          Computer = $env:COMPUTERNAME; Namespace = $ns
+          Enable = $false; Execute = $false; Remote = $false
+          Source = 'ERROR'; Propagates = $false; PASS = $false
+          Note = 'Cannot read security descriptor'
         }
       }
-      $mask = 0; $flags = 0; $src = 'INHERITED'; $hit = $false
+
+      $mask = 0; $flags = 0; $hit = $false; $src = 'INHERITED'
       foreach ($ace in @($sd.DACL)) {
         if ($ace.Trustee -and $ace.Trustee.SID) {
           if ( ([byte[]]$ace.Trustee.SID -join ',') -eq $sidKey ) {
-            $hit = $true; $mask = $mask -bor ([int]$ace.AccessMask); $flags = $flags -bor ([int]$ace.AceFlags)
-            if ( ($ace.AceFlags -band 0x10) -eq 0 ) { $src = 'EXPLICIT' }  # not INHERITED
+            $hit = $true
+            $mask = $mask  -bor ([int]$ace.AccessMask)
+            $flags = $flags -bor ([int]$ace.AceFlags)
+            if ( ($ace.AceFlags -band $ACE_INH) -eq 0 ) { $src = 'EXPLICIT' }
           }
         }
       }
+
       $hasReq = ( ($mask -band $required) -eq $required )
-      $prop = ( ($flags -band 0x02) -ne 0 )  # CONTAINER_INHERIT_ACE
+      $prop = ( ($flags -band $ACE_CI) -ne 0 )
       $pass = $hasReq -and ( -not $expectPropagate -or $prop )
 
       [pscustomobject]@{
-        Computer        = $env:COMPUTERNAME
-        Namespace       = $ns
-        RequiredMask    = ('0x{0:X}' -f $required)
-        AccessMask      = ('0x{0:X}' -f $mask)
-        HasRequired     = $hasReq
-        Source          = $(if ($hit) { $src }else { 'NONE' })
-        Propagates      = $prop
-        ExpectPropagate = $expectPropagate
-        PASS            = $pass
-        Note            = $(if (-not $hit) { 'No ACE for this account' } else { if ($expectPropagate -and -not $prop) { 'Expected propagate flag at this level' } else { '' } })
+        Computer   = $env:COMPUTERNAME
+        Namespace  = $ns
+        Enable     = [bool]($mask -band $BIT_ENABLE)
+        Execute    = [bool]($mask -band $BIT_EXEC)
+        Remote     = [bool]($mask -band $BIT_REMOTE)
+        Source     = $(if ($hit) { $src }else { 'NONE' })
+        Propagates = $prop
+        PASS       = $pass
+        Note       = $(if (-not $hit) { 'No ACE for this account' } elseif ($expectPropagate -and -not $prop) { 'Expected propagate flag at root' } else { '' })
       }
     }
 
     $rows = @()
-    # Evaluate scopes
-    $rows += Eval-NS 'root\cimv2' $REQ_CIMV2 $false
-    $rows += Eval-NS 'root\DEFAULT' $REQ_DEFAULT $false
-    $rows += Eval-NS 'root\Microsoft\SqlServer' $REQ_SQL $true
+    $rows += Check-Namespace 'root\cimv2' $REQ_CIMV2 $false
+    $rows += Check-Namespace 'root\DEFAULT' $REQ_DEFAULT $false
 
-    # Children under SQL branch (2 levels deep is plenty for SQL WMI)
+    # SQL root
+    $rows += Check-Namespace 'root\Microsoft\SqlServer' $REQ_SQL $true
+
+    # SQL children (full recursion)
     try {
-      $kids = Get-CimInstance -Namespace 'root\Microsoft\SqlServer' -Class __NAMESPACE -ErrorAction Stop |
-      Select-Object -ExpandProperty Name
-      foreach ($k in $kids) {
-        $ns1 = "root\Microsoft\SqlServer\$k"
-        $rows += Eval-NS $ns1 $REQ_SQL $false
-        try {
-          $kids2 = Get-CimInstance -Namespace $ns1 -Class __NAMESPACE -ErrorAction Stop |
-          Select-Object -ExpandProperty Name
-          foreach ($k2 in $kids2) {
-            $ns2 = "$ns1\$k2"
-            $rows += Eval-NS $ns2 $REQ_SQL $false
-          }
-        }
-        catch {}
+      foreach ($ns in (Get-AllChildren 'root\Microsoft\SqlServer')) {
+        $rows += Check-Namespace $ns $REQ_SQL $false
       }
     }
     catch {}
 
-    $rows
+    if ($OnlyFailures) { $rows = $rows | Where-Object { -not $_.PASS } }
+    $rows | Sort-Object Namespace
   }
 
+  $invoke = @{ ScriptBlock = $sb; ArgumentList = @($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL, $OnlyFailures.IsPresent) }
+  if ($Credential) { $invoke.Credential = $Credential }
+
   foreach ($c in $ComputerName) {
-    $p = @{ ComputerName = $c; ScriptBlock = $sb; ArgumentList = @($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL) }
-    if ($Credential) { $p.Credential = $Credential }
     try {
-      Invoke-Command @p |
-      Sort-Object Namespace |
-      Select-Object Computer, Namespace, Source, Propagates, ExpectPropagate, RequiredMask, AccessMask, PASS, Note
+      Invoke-Command -ComputerName $c @invoke
     }
     catch {
       Write-Warning "[$c] $_"
     }
   }
 }
+<#
+# Get-WmiRights_OEMScope
+# Get-WmiRights_OEMScope -ComputerName qsql-04, qsql-02 -Account 'AD\svc_oemagt' | Format-Table Computer, Namespace, Enable, Execute, Remote, Source, Propagates, PASS, Note -Auto
+#>
 
+function Test-RegistryRights_OEM {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string]$Account,                   # 'AD\svc_oemagt' or group
+    [string[]]$ComputerName = $env:COMPUTERNAME,
+    [switch]$UseRemoteRegistry,                               # use Remote Registry API instead of WinRM
+    [switch]$OnlyFailures                                     # show only keys that are applicable and missing Read
+  )
 
-# Validate after running your grant functions
-Test-WmiRights_OEMScope -ComputerName qsql-02 -Account 'AD\svc_oemagt' |
-Format-Table -Auto
+  $regPaths = @(
+    'HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server',
+    'HKLM:\SOFTWARE\Microsoft\MSSQLServer',
+    'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server',
+    'HKLM:\SOFTWARE\Wow6432Node\Microsoft\MSSQLServer'
+  )
+
+  if (-not $UseRemoteRegistry) {
+    # ---- WinRM path (preferred) ----
+    $sb = {
+      param($Account, $Paths, $OnlyFailures)
+
+      function Test-OneKey {
+        param([string]$Path)
+        $exists = Test-Path -Path $Path
+        if (-not $exists) {
+          return [pscustomobject]@{
+            Computer = $env:COMPUTERNAME; Path = $Path; Exists = $false; Applicable = $false
+            HasRead = $true; Source = 'N/A'; AppliesToChildren = $false; RightsHex = $null
+            PASS = $true; Note = 'Key missing (not applicable on this host)'
+          }
+        }
+        try {
+          $acl = Get-Acl -Path $Path
+          $rules = $acl.GetAccessRules($true, $true, [System.Security.Principal.NTAccount])
+
+          $match = @($rules | Where-Object {
+              $_.IdentityReference.Value -ieq $Account -and $_.AccessControlType -eq 'Allow'
+            })
+
+          $mask = 0
+          $applies = $false
+          $source = 'NONE'
+          foreach ($r in $match) {
+            $mask = $mask -bor [int][System.Security.AccessControl.RegistryRights]$r.RegistryRights
+            if ($r.InheritanceFlags -band [System.Security.AccessControl.InheritanceFlags]::ContainerInherit) { $applies = $true }
+            if (-not $r.IsInherited) { $source = 'EXPLICIT' }
+          }
+          if ($source -eq 'NONE' -and $match.Count -gt 0) { $source = 'INHERITED' }
+
+          $hasRead = (($mask -band [int][System.Security.AccessControl.RegistryRights]::ReadKey) -ne 0) -or
+          (($mask -band [int][System.Security.AccessControl.RegistryRights]::FullControl) -ne 0)
+
+          $obj = [pscustomobject]@{
+            Computer = $env:COMPUTERNAME; Path = $Path; Exists = $true; Applicable = $true
+            HasRead = $hasRead; Source = $source; AppliesToChildren = $applies
+            RightsHex = ('0x{0:X}' -f $mask)
+            PASS = $hasRead
+            Note = $(if (-not $hasRead) { 'No Allow:ReadKey ACE for this account' } else { '' })
+          }
+          return $obj
+        }
+        catch {
+          return [pscustomobject]@{
+            Computer = $env:COMPUTERNAME; Path = $Path; Exists = $true; Applicable = $true
+            HasRead = $false; Source = 'ERROR'; AppliesToChildren = $false; RightsHex = $null
+            PASS = $false; Note = $_.Exception.Message
+          }
+        }
+      }
+
+      $rows = foreach ($p in $Paths) { Test-OneKey -Path $p }
+      if ($OnlyFailures) { $rows = $rows | Where-Object { $_.Applicable -and -not $_.PASS } }
+      $rows | Sort-Object Path
+    }
+
+    foreach ($c in $ComputerName) {
+      try {
+        if ($c -ieq $env:COMPUTERNAME) {
+          & $sb $Account $regPaths $OnlyFailures.IsPresent
+        }
+        else {
+          Invoke-Command -ComputerName $c -ScriptBlock $sb -ArgumentList $Account, $regPaths, $OnlyFailures.IsPresent
+        }
+      }
+      catch {
+        Write-Warning "[$c] WinRM check failed: $_"
+      }
+    }
+    return
+  }
+
+  # ---- Remote Registry API path (no WinRM) ----
+  Add-Type -AssemblyName 'Microsoft.Win32.Registry'
+  # Resolve account SID once
+  try {
+    if ($Account -match '^S-\d-') { $acctSid = New-Object System.Security.Principal.SecurityIdentifier($Account) }
+    else { $acctSid = ([System.Security.Principal.NTAccount]$Account).Translate([System.Security.Principal.SecurityIdentifier]) }
+  }
+  catch { throw "Cannot resolve [$Account] to SID: $($_.Exception.Message)" }
+
+  foreach ($c in $ComputerName) {
+    foreach ($p in $regPaths) {
+      if ($p -notmatch '^HKLM:\\(.+)$') { continue }
+      $subKey = $Matches[1]
+      try {
+        $base = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey([Microsoft.Win32.RegistryHive]::LocalMachine, $c)
+        $key = $base.OpenSubKey($subKey, $false)
+        if (-not $key) {
+          $obj = [pscustomobject]@{
+            Computer = $c; Path = $p; Exists = $false; Applicable = $false
+            HasRead = $true; Source = 'N/A'; AppliesToChildren = $false; RightsHex = $null
+            PASS = $true; Note = 'Key missing (not applicable on this host)'
+          }
+          if ($OnlyFailures -and $obj.PASS) { } else { $obj }
+          continue
+        }
+
+        $rs = $key.GetAccessControl()
+        $rules = $rs.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier])
+
+        $match = @($rules | Where-Object {
+            $_.IdentityReference -eq $acctSid -and $_.AccessControlType -eq [System.Security.AccessControl.AccessControlType]::Allow
+          })
+
+        $mask = 0
+        $applies = $false
+        $source = 'NONE'
+        foreach ($r in $match) {
+          $mask = $mask -bor [int][System.Security.AccessControl.RegistryRights]$r.RegistryRights
+          if ($r.InheritanceFlags -band [System.Security.AccessControl.InheritanceFlags]::ContainerInherit) { $applies = $true }
+          if (-not $r.IsInherited) { $source = 'EXPLICIT' }
+        }
+        if ($source -eq 'NONE' -and $match.Count -gt 0) { $source = 'INHERITED' }
+
+        $hasRead = (($mask -band [int][System.Security.AccessControl.RegistryRights]::ReadKey) -ne 0) -or
+        (($mask -band [int][System.Security.AccessControl.RegistryRights]::FullControl) -ne 0)
+
+        $obj = [pscustomobject]@{
+          Computer = $c; Path = $p; Exists = $true; Applicable = $true
+          HasRead = $hasRead; Source = $source; AppliesToChildren = $applies
+          RightsHex = ('0x{0:X}' -f $mask)
+          PASS = $hasRead; Note = $(if (-not $hasRead) { 'No Allow:ReadKey ACE for this account' }else { '' })
+        }
+        $key.Close()
+        if ($OnlyFailures -and $obj.PASS) { } else { $obj }
+      }
+      catch {
+        $obj = [pscustomobject]@{
+          Computer = $c; Path = $p; Exists = $true; Applicable = $true
+          HasRead = $false; Source = 'ERROR'; AppliesToChildren = $false; RightsHex = $null
+          PASS = $false; Note = $_.Exception.Message
+        }
+        if ($OnlyFailures -and $obj.PASS) { } else { $obj }
+      }
+    }
+  }
+}
+<#
+# Validate on one server (WinRM path)
+Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 |
+  Format-Table Computer,Path,HasRead,Source,AppliesToChildren,RightsHex,PASS,Note -Auto
+
+# Only show failures
+Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -OnlyFailures
 
 # Multiple servers
-$servers = 'qsql-02', 'qsql-04'
-Test-WmiRights_OEMScope -ComputerName $servers -Account 'AD\svc_oemagt' |
-Sort-Object Computer, Namespace | ft -Auto
+$servers = 'qsql-02','qsql-04'
+Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName $servers |
+  Sort-Object Computer,Path | ft -Auto
+
+# If WinRM is blocked, use Remote Registry API
+Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName $servers -UseRemoteRegistry
+#>
+
+
+
+
+
+
+
+
+
+
 
 
 

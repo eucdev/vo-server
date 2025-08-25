@@ -260,7 +260,6 @@ function Grant-RegistryRights_OEM {
   }
 }
 
-
 function Show-DcomLaunchEffectiveRemote {
   [CmdletBinding()]
   param(
@@ -355,6 +354,7 @@ function Show-DcomLaunchEffectiveRemote {
   }
 }
 
+
 <#
 # After adding SQL server to SQL_OEM_WMI_DCOM, we might need to Force refresh + refresh the computer account’s token:
 # gpupdate /force
@@ -386,6 +386,143 @@ Show-DcomLaunchEffectiveRemote -ComputerName $servers -MatchAccount 'SQL_OEM_WMI
 # Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02 -UseRemoteRegistry -Confirm:$false
 # Many servers
 # Grant-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName qsql-02, qsql-04, qsql-06 -Confirm:$false
+
+
+
+
+
+
+
+
+
+function Test-WmiRights_OEMScope {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)][string[]]$ComputerName,
+    [Parameter(Mandatory)][string]$Account,
+    [switch]$IncludeExecuteOnCimv2,     # matches your Grant function
+    [pscredential]$Credential
+  )
+
+  $BIT_EXECUTE = 0x0002
+  $BIT_ENABLE = 0x0001
+  $BIT_REMOTE = 0x0020
+  $REQ_DEFAULT = $BIT_ENABLE -bor $BIT_EXECUTE -bor $BIT_REMOTE
+  $REQ_SQL = $REQ_DEFAULT
+  $REQ_CIMV2 = if ($IncludeExecuteOnCimv2) { $REQ_DEFAULT } else { $BIT_ENABLE -bor $BIT_REMOTE }
+
+  $sb = {
+    param($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL)
+
+    function ReadAcl($ns) {
+      try {
+        $scope = New-Object System.Management.ManagementScope("\\$env:COMPUTERNAME\$ns"); $scope.Connect()
+        $sec = New-Object System.Management.ManagementClass($scope, (New-Object System.Management.ManagementPath('__SystemSecurity')), $null)
+        $ret = $sec.InvokeMethod('GetSecurityDescriptor', $null, $null)
+        if ($ret.ReturnValue -ne 0 -or -not $ret.Descriptor) { return $null }
+        return $ret.Descriptor
+      }
+      catch { return $null }
+    }
+
+    # Resolve SID
+    try {
+      $sid = (New-Object System.Security.Principal.NTAccount($Account)).Translate([System.Security.Principal.SecurityIdentifier])
+      $sidBytes = New-Object 'byte[]' ($sid.BinaryLength); $sid.GetBinaryForm($sidBytes, 0)
+      $sidKey = ($sidBytes -join ',')
+    }
+    catch { throw "[$env:COMPUTERNAME] Cannot resolve [$Account] to SID: $($_.Exception.Message)" }
+
+    function Eval-NS($ns, [int]$required, [bool]$expectPropagate) {
+      $sd = ReadAcl $ns
+      if (-not $sd) {
+        return [pscustomobject]@{
+          Computer = $env:COMPUTERNAME; Namespace = $ns; RequiredMask = ('0x{0:X}' -f $required)
+          AccessMask = ''; HasRequired = $false; Source = 'ERROR'; Propagates = $false; ExpectPropagate = $expectPropagate
+          PASS = $false; Note = 'Cannot read security descriptor'
+        }
+      }
+      $mask = 0; $flags = 0; $src = 'INHERITED'; $hit = $false
+      foreach ($ace in @($sd.DACL)) {
+        if ($ace.Trustee -and $ace.Trustee.SID) {
+          if ( ([byte[]]$ace.Trustee.SID -join ',') -eq $sidKey ) {
+            $hit = $true; $mask = $mask -bor ([int]$ace.AccessMask); $flags = $flags -bor ([int]$ace.AceFlags)
+            if ( ($ace.AceFlags -band 0x10) -eq 0 ) { $src = 'EXPLICIT' }  # not INHERITED
+          }
+        }
+      }
+      $hasReq = ( ($mask -band $required) -eq $required )
+      $prop = ( ($flags -band 0x02) -ne 0 )  # CONTAINER_INHERIT_ACE
+      $pass = $hasReq -and ( -not $expectPropagate -or $prop )
+
+      [pscustomobject]@{
+        Computer        = $env:COMPUTERNAME
+        Namespace       = $ns
+        RequiredMask    = ('0x{0:X}' -f $required)
+        AccessMask      = ('0x{0:X}' -f $mask)
+        HasRequired     = $hasReq
+        Source          = $(if ($hit) { $src }else { 'NONE' })
+        Propagates      = $prop
+        ExpectPropagate = $expectPropagate
+        PASS            = $pass
+        Note            = $(if (-not $hit) { 'No ACE for this account' } else { if ($expectPropagate -and -not $prop) { 'Expected propagate flag at this level' } else { '' } })
+      }
+    }
+
+    $rows = @()
+    # Evaluate scopes
+    $rows += Eval-NS 'root\cimv2' $REQ_CIMV2 $false
+    $rows += Eval-NS 'root\DEFAULT' $REQ_DEFAULT $false
+    $rows += Eval-NS 'root\Microsoft\SqlServer' $REQ_SQL $true
+
+    # Children under SQL branch (2 levels deep is plenty for SQL WMI)
+    try {
+      $kids = Get-CimInstance -Namespace 'root\Microsoft\SqlServer' -Class __NAMESPACE -ErrorAction Stop |
+      Select-Object -ExpandProperty Name
+      foreach ($k in $kids) {
+        $ns1 = "root\Microsoft\SqlServer\$k"
+        $rows += Eval-NS $ns1 $REQ_SQL $false
+        try {
+          $kids2 = Get-CimInstance -Namespace $ns1 -Class __NAMESPACE -ErrorAction Stop |
+          Select-Object -ExpandProperty Name
+          foreach ($k2 in $kids2) {
+            $ns2 = "$ns1\$k2"
+            $rows += Eval-NS $ns2 $REQ_SQL $false
+          }
+        }
+        catch {}
+      }
+    }
+    catch {}
+
+    $rows
+  }
+
+  foreach ($c in $ComputerName) {
+    $p = @{ ComputerName = $c; ScriptBlock = $sb; ArgumentList = @($Account, $REQ_CIMV2, $REQ_DEFAULT, $REQ_SQL) }
+    if ($Credential) { $p.Credential = $Credential }
+    try {
+      Invoke-Command @p |
+      Sort-Object Namespace |
+      Select-Object Computer, Namespace, Source, Propagates, ExpectPropagate, RequiredMask, AccessMask, PASS, Note
+    }
+    catch {
+      Write-Warning "[$c] $_"
+    }
+  }
+}
+
+
+# Validate after running your grant functions
+Test-WmiRights_OEMScope -ComputerName qsql-02 -Account 'AD\svc_oemagt' |
+Format-Table -Auto
+
+# Multiple servers
+$servers = 'qsql-02', 'qsql-04'
+Test-WmiRights_OEMScope -ComputerName $servers -Account 'AD\svc_oemagt' |
+Sort-Object Computer, Namespace | ft -Auto
+
+
 
 
 

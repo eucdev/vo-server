@@ -702,7 +702,80 @@ Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName $servers |
 Test-RegistryRights_OEM -Account 'AD\svc_oemagt' -ComputerName $servers -UseRemoteRegistry
 #>
 
+function Grant-SqlSysadmin {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)] [string[]] $ServerInstance,     # e.g. 'qsql-02','qsql-04','qsql-06'
+    [Parameter(Mandatory)] [string]   $Principal,          # e.g. 'HVI\SQL_OEM_SQLSysadmin_G'
+    [pscredential] $Credential
+  )
 
+  $tsql = @"
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = N'$Principal')
+  CREATE LOGIN [$Principal] FROM WINDOWS;
+IF NOT EXISTS (
+  SELECT 1
+  FROM sys.server_role_members rm
+  JOIN sys.server_principals r ON r.principal_id = rm.role_principal_id AND r.name = N'sysadmin'
+  JOIN sys.server_principals m ON m.principal_id = rm.member_principal_id AND m.name = N'$Principal'
+)
+  ALTER SERVER ROLE [sysadmin] ADD MEMBER [$Principal];
+"@
+
+  foreach ($s in $ServerInstance) {
+    try {
+      $args = @{ ServerInstance = $s; Query = $tsql; Encrypt = 'Optional'; TrustServerCertificate = $true }
+      if ($Credential) { $args.Credential = $Credential }
+      Invoke-Sqlcmd @args
+      Write-Host "[$s] ensured [$Principal] is a sysadmin."
+    }
+    catch {
+      Write-Warning "[$s] failed: $($_.Exception.Message)"
+    }
+  }
+}
+<#
+$nodes = 'qsql-02','qsql-04','qsql-06'
+Grant-SqlSysadmin -ServerInstance $nodes -Principal 'HVI\SQL_OEM_Sysadmin'
+#>
+
+function Test-SqlSysadmin {
+  [CmdletBinding()]
+  param(
+    [Parameter(Mandatory)] [string[]] $ServerInstance,
+    [Parameter(Mandatory)] [string]   $Principal,
+    [pscredential] $Credential
+  )
+
+  $qTemplate = @"
+SELECT @@SERVERNAME AS ServerName,
+       IIF(EXISTS(
+         SELECT 1
+         FROM sys.server_role_members rm
+         JOIN sys.server_principals r ON r.principal_id = rm.role_principal_id AND r.name = N'sysadmin'
+         JOIN sys.server_principals m ON m.principal_id = rm.member_principal_id AND m.name = N'{0}'
+       ),1,0) AS IsSysadmin;
+"@
+
+  foreach ($s in $ServerInstance) {
+    try {
+      $query = [string]::Format($qTemplate, $Principal)
+      $args = @{ ServerInstance = $s; Query = $query; Encrypt = 'Optional'; TrustServerCertificate = $true }
+      if ($Credential) { $args.Credential = $Credential }
+      $row = Invoke-Sqlcmd @args
+      $flag = if ($row.IsSysadmin -eq 1) { 'True' } else { 'False' }   # 5.1-safe (no ternary)
+      "{0,-20} Sysadmin={1}" -f $s, $flag
+    }
+    catch {
+      Write-Warning "[$s] test failed: $($_.Exception.Message)"
+    }
+  }
+}
+<#
+$nodes = 'qsql-02','qsql-04','qsql-06'
+$nodes = 'qsql-02'
+Test-SqlSysadmin  -ServerInstance $nodes -Principal 'HVI\svc_oemmgt'
+#>
 
 
 
